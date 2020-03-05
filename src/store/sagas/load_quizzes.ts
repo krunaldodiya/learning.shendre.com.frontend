@@ -3,9 +3,9 @@ import {
   LOAD_QUIZZES,
   LOAD_QUIZZES_FAIL,
   LOAD_QUIZZES_SUCCESS,
-} from '../constants';
+} from '../constants/quiz';
 
-import {loadQuizzes} from '../api/quizzes';
+import {loadQuizzes} from '../api/load_quizzes';
 import {quizList} from '../schema';
 import {normalize} from 'normalizr';
 

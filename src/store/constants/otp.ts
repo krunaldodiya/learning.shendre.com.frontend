@@ -1,0 +1,10 @@
+export const REQUEST_OTP = 'REQUEST_OTP';
+export const REQUEST_OTP_SUCCESS = 'REQUEST_OTP_SUCCESS';
+export const REQUEST_OTP_FAIL = 'REQUEST_OTP_FAIL';
+
+export const VERIFY_OTP = 'VERIFY_OTP';
+export const VERIFY_OTP_SUCCESS = 'VERIFY_OTP_SUCCESS';
+export const VERIFY_OTP_FAIL = 'VERIFY_OTP_FAIL';
+
+export const SET_MOBILE = 'SET_MOBILE';
+export const SET_CLIENT_OTP = 'SET_CLIENT_OTP';

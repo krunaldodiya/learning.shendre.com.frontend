@@ -1,14 +1,12 @@
 import {combineReducers} from 'redux';
-import {person} from './person';
-import {todos} from './todos';
+import {auth} from './auth';
+import {otp} from './otp';
 import {quizzes} from './quizzes';
-import {initialScreen} from './initial_screen';
 
 const rootReducer = combineReducers({
-  person,
-  todos,
+  auth,
+  otp,
   quizzes,
-  initialScreen,
 });
 
 export {rootReducer};

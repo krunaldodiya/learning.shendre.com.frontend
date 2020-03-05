@@ -3,12 +3,12 @@ import {
   LOAD_QUIZZES,
   LOAD_QUIZZES_FAIL,
   LOAD_QUIZZES_SUCCESS,
-} from '../constants';
+} from '../constants/quiz';
 
 const initialState = {
   loading: false,
   loaded: false,
-  error: {},
+  errors: null,
   data: {
     entities: {
       quizzes: {},
@@ -33,7 +33,7 @@ function quizzes(state = initialState, {type, payload}: any) {
 
     case LOAD_QUIZZES_FAIL:
       return produce(state, (draftState: any) => {
-        draftState.error = payload;
+        draftState.errors = payload;
         draftState.loading = false;
         draftState.loaded = true;
       });

@@ -9,6 +9,7 @@ import {rootSaga} from './sagas';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
+  blacklist: ['otp'],
 };
 
 const sagaMiddleware = createSagaMiddleware();

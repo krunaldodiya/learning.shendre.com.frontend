@@ -1,4 +1,4 @@
-import {LOAD_QUIZZES} from '../constants';
+import {LOAD_QUIZZES} from '../constants/quiz';
 
 export function loadQuizzes() {
   return {
