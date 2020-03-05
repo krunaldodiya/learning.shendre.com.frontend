@@ -67,6 +67,7 @@ function otp(state = initialState, action: any) {
       return {
         ...state,
         mobile: action.payload.mobile,
+        errors: null,
       };
     }
 
@@ -74,6 +75,7 @@ function otp(state = initialState, action: any) {
       return {
         ...state,
         clientOtp: action.payload.clientOtp,
+        errors: null,
       };
     }
 
