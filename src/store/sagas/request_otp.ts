@@ -1,6 +1,5 @@
-// import {CommonActions} from '@react-navigation/native';
 import {call, put, takeEvery} from 'redux-saga/effects';
-// import {screens} from '../../libs/screens';
+import {screens} from '../../libs/screens';
 import {requestOtp} from '../api/request_otp';
 import {
   REQUEST_OTP,
@@ -9,11 +8,14 @@ import {
 } from '../constants/otp';
 
 function* handleRequestOtp(action: any) {
+  const {navigation, mobile} = action.payload;
+
   try {
-    const {data} = yield call(requestOtp, {mobile: action.payload.mobile});
+    const {data} = yield call(requestOtp, {mobile});
 
     yield put({type: REQUEST_OTP_SUCCESS, payload: data});
-    // yield put(CommonActions.navigate({name: screens.VerifyOtp}));
+
+    navigation.replace(screens.VerifyOtp);
   } catch (error) {
     yield put({
       type: REQUEST_OTP_FAIL,

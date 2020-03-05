@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button, SafeAreaView, StatusBar, TextInput, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {screens} from '../libs/screens';
 import {setMobile, requestOtp} from '../store/actions/otp';
 
 function RequestOtp(props: any) {
@@ -9,9 +8,7 @@ function RequestOtp(props: any) {
   const dispatch = useDispatch();
 
   const processRequestOtp = async () => {
-    dispatch(requestOtp(otpState.mobile));
-
-    props.navigation.replace(screens.VerifyOtp);
+    dispatch(requestOtp(otpState.mobile, props.navigation));
   };
 
   return (

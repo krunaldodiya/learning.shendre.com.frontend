@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button, SafeAreaView, StatusBar, TextInput, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {screens} from '../libs/screens';
 import {setClientOtp, verifyOtp} from '../store/actions/otp';
 
 const IMEI = require('react-native-imei');
@@ -12,9 +11,9 @@ function VerifyOtp(props: any) {
 
   const processVerifyOtp = async () => {
     const imei = await IMEI.getImei();
-    dispatch(verifyOtp(otpState.mobile, otpState.clientOtp, imei[0]));
-
-    props.navigation.replace(screens.Home);
+    dispatch(
+      verifyOtp(otpState.mobile, otpState.clientOtp, imei[0], props.navigation),
+    );
   };
 
   return (

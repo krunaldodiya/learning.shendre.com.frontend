@@ -19,16 +19,21 @@ export function setClientOtp(clientOtp: string) {
   };
 }
 
-export function requestOtp(mobile: string) {
+export function requestOtp(mobile: string, navigation: any) {
   return {
     type: REQUEST_OTP,
-    payload: {mobile},
+    payload: {mobile, navigation},
   };
 }
 
-export function verifyOtp(mobile: string, otp: string, imei: string) {
+export function verifyOtp(
+  mobile: string,
+  otp: string,
+  imei: string,
+  navigation: any,
+) {
   return {
     type: VERIFY_OTP,
-    payload: {mobile, otp, imei},
+    payload: {mobile, otp, imei, navigation},
   };
 }
