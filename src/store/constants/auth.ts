@@ -1,2 +1,7 @@
 export const SET_INITIAL_SCREEN = 'SET_INITIAL_SCREEN';
-export const SET_AUTH = 'SET_AUTH';
+export const SET_TOKEN = 'SET_TOKEN';
+export const SET_USER = 'SET_USER';
+
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+export const UPDATE_PROFILE_SUCCESS = 'UPDATE_PROFILE_SUCCESS';
+export const UPDATE_PROFILE_FAIL = 'UPDATE_PROFILE_FAIL';

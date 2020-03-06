@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {screens} from '../libs/screens';
+import {theme} from '../libs/theme';
 import EditProfile from './EditProfile';
 import Home from './Home';
 import RequestOtp from './RequestOtp';
@@ -33,7 +34,18 @@ function InitialScreen() {
         <RootStack.Screen
           name={screens.EditProfile}
           component={EditProfile}
-          options={{header: () => null}}
+          options={{
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: theme.primary,
+              elevation: 0,
+            },
+            title: 'Update Profile',
+            headerTitleStyle: {
+              color: '#fff',
+              textTransform: 'uppercase',
+            },
+          }}
         />
       </RootStack.Navigator>
     </NavigationContainer>

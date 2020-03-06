@@ -7,7 +7,10 @@ function Avatar(props: any) {
   const {size, source, onUploadSuccess, onUploadFail, token, uploadUrl} = props;
 
   const uploadAvatar = async () => {
-    const file: any = await ImagePicker.openPicker({multiple: false});
+    const file: any = await ImagePicker.openPicker({
+      multiple: false,
+      mediaType: 'photo',
+    });
 
     const downloadTask = RNFetchBlob.fetch(
       'POST',
@@ -45,6 +48,7 @@ function Avatar(props: any) {
         source={{uri: source}}
         width={size}
         height={size}
+        resizeMode="cover"
         style={{
           borderRadius: size,
           width: size,

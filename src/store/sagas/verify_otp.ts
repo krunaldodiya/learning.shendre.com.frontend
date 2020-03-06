@@ -1,7 +1,7 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
 import {screens} from '../../libs/screens';
 import {verifyOtp} from '../api/verify_otp';
-import {SET_AUTH, SET_INITIAL_SCREEN} from '../constants/auth';
+import {SET_INITIAL_SCREEN, SET_TOKEN, SET_USER} from '../constants/auth';
 import {
   VERIFY_OTP,
   VERIFY_OTP_FAIL,
@@ -18,7 +18,8 @@ function* handleVerifyOtp(action: any) {
       data.user.status === true ? screens.Home : screens.EditProfile;
 
     yield put({type: VERIFY_OTP_SUCCESS});
-    yield put({type: SET_AUTH, payload: data});
+    yield put({type: SET_USER, payload: data.user});
+    yield put({type: SET_TOKEN, payload: data.token});
     yield put({type: SET_INITIAL_SCREEN, payload: {initial_screen}});
 
     navigation.replace(initial_screen);
