@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {theme} from '../libs/theme';
 import {setClientOtp, verifyOtp} from '../store/actions/otp';
 
 const IMEI = require('react-native-imei');
@@ -26,12 +27,44 @@ function VerifyOtp(props: any) {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <StatusBar barStyle="light-content" backgroundColor={theme.primary} />
 
-      <SafeAreaView style={{flex: 1}}>
-        <View style={{flex: 1, padding: 50}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: theme.primary}}>
+        <View style={{flex: 1, padding: 50, justifyContent: 'center'}}>
+          <View>
+            <View style={{marginBottom: 30}}>
+              <Text
+                style={{
+                  color: '#fff',
+                  textAlign: 'center',
+                  fontSize: 26,
+                  textTransform: 'uppercase',
+                }}>
+                Verify Otp
+              </Text>
+            </View>
+
+            <View style={{marginBottom: 50}}>
+              <Text style={{color: '#fff', textAlign: 'center', fontSize: 16}}>
+                Please enter verification code send to
+              </Text>
+
+              <Text
+                style={{
+                  color: '#fff',
+                  textAlign: 'center',
+                  fontSize: 16,
+                  marginTop: 5,
+                  fontWeight: 'bold',
+                }}>
+                {otpState.mobile}
+              </Text>
+            </View>
+          </View>
+
           <View style={{marginBottom: 20}}>
             <TextInput
+              placeholder="OTP"
               maxLength={4}
               style={{
                 backgroundColor: 'white',
@@ -72,7 +105,7 @@ function VerifyOtp(props: any) {
                     fontWeight: '700',
                     fontSize: 18,
                   }}>
-                  request otp
+                  verify otp
                 </Text>
               )}
             </TouchableOpacity>
