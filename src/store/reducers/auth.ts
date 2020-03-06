@@ -36,7 +36,13 @@ function auth(state = initialState, {type, payload}: any) {
     }
 
     case UPDATE_PROFILE_SUCCESS: {
-      return {...state, loading: false, loaded: true, user: payload.user};
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        user: payload.user,
+        errors: null,
+      };
     }
 
     case UPDATE_PROFILE_FAIL: {

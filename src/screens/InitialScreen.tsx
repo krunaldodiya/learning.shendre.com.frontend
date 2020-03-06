@@ -35,6 +35,7 @@ function InitialScreen() {
           name={screens.EditProfile}
           component={EditProfile}
           options={{
+            headerTintColor: '#fff',
             headerTitleAlign: 'center',
             headerStyle: {
               backgroundColor: theme.primary,

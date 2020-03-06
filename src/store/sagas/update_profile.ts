@@ -9,12 +9,11 @@ import {
 } from '../constants/auth';
 
 function* handleUpdateProfile(action: any) {
-  const token = yield select(state => state.auth.token);
-
+  const authState = yield select(state => state.auth);
   const {navigation, user} = action.payload;
 
   try {
-    const {data} = yield call(updateProfile, {user, token});
+    const {data} = yield call(updateProfile, {user, token: authState.token});
 
     yield put({type: UPDATE_PROFILE_SUCCESS, payload: data});
     yield put({
@@ -22,7 +21,11 @@ function* handleUpdateProfile(action: any) {
       payload: {initial_screen: screens.Home},
     });
 
-    navigation.replace(screens.Home);
+    if (authState.user.status === true) {
+      navigation.pop();
+    } else {
+      navigation.replace(screens.Home);
+    }
   } catch (error) {
     yield put({
       type: UPDATE_PROFILE_FAIL,

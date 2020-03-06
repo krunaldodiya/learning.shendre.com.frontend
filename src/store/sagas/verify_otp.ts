@@ -18,8 +18,8 @@ function* handleVerifyOtp(action: any) {
       data.user.status === true ? screens.Home : screens.EditProfile;
 
     yield put({type: VERIFY_OTP_SUCCESS});
-    yield put({type: SET_USER, payload: data.user});
-    yield put({type: SET_TOKEN, payload: data.token});
+    yield put({type: SET_USER, payload: {user: data.user}});
+    yield put({type: SET_TOKEN, payload: {token: data.token}});
     yield put({type: SET_INITIAL_SCREEN, payload: {initial_screen}});
 
     navigation.replace(initial_screen);
