@@ -1,4 +1,3 @@
-import {produce} from 'immer';
 import {SET_CHAPTERS} from '../constants/chapters';
 
 const initialState = {
@@ -10,10 +9,9 @@ const initialState = {
 
 function chapters(state = initialState, {type, payload}: any) {
   switch (type) {
-    case SET_CHAPTERS:
-      return produce(state, (draftState: any) => {
-        draftState.data = payload.chapters;
-      });
+    case SET_CHAPTERS: {
+      return {...state, data: payload.chapters};
+    }
 
     default:
       return state;
