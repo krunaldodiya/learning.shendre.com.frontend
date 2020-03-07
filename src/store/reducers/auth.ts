@@ -6,6 +6,9 @@ import {
   UPDATE_PROFILE,
   UPDATE_PROFILE_FAIL,
   UPDATE_PROFILE_SUCCESS,
+  GET_AUTH_USER,
+  GET_AUTH_USER_SUCCESS,
+  GET_AUTH_USER_FAIL,
 } from '../constants/auth';
 
 const initialState = {
@@ -29,6 +32,24 @@ function auth(state = initialState, {type, payload}: any) {
 
     case SET_USER: {
       return {...state, user: payload.user};
+    }
+
+    case GET_AUTH_USER: {
+      return {...state, loading: true, loaded: false};
+    }
+
+    case GET_AUTH_USER_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        loaded: true,
+        user: payload.user,
+        errors: null,
+      };
+    }
+
+    case GET_AUTH_USER_FAIL: {
+      return {...state, loading: false, loaded: true, errors: payload.errors};
     }
 
     case UPDATE_PROFILE: {

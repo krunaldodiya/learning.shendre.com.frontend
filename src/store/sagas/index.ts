@@ -1,4 +1,5 @@
 import {all} from 'redux-saga/effects';
+import {getAuthUserWatcher} from './get_auth_user';
 import {loadCategoriesWatcher} from './load_categories';
 import {requestOtpWatcher} from './request_otp';
 import {updateProfileWatcher} from './update_profile';
@@ -10,6 +11,7 @@ function* rootSaga() {
     requestOtpWatcher(),
     verifyOtpWatcher(),
     updateProfileWatcher(),
+    getAuthUserWatcher(),
   ]);
 }
 

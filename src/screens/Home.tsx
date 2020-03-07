@@ -1,20 +1,13 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
-import {Text, View} from 'react-native';
-import {useSelector} from 'react-redux';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
+import {getAuthUser} from '../store/actions/auth';
 import Categories from './Categories';
 import Chapters from './Chapters';
-
-function DrawerMenu(props: any) {
-  return (
-    <View>
-      <Text>hello</Text>
-    </View>
-  );
-}
+import DrawerMenu from './DrawerMenu';
 
 function DrawerNavigator(props: any) {
   const Drawer = createDrawerNavigator();
@@ -31,8 +24,14 @@ function DrawerNavigator(props: any) {
 }
 
 function Home(props: any) {
+  const dispatch = useDispatch();
+
   const authState = useSelector((state: any) => state.auth);
   props.navigation.setOptions({title: authState.user.name});
+
+  useEffect(() => {
+    dispatch(getAuthUser());
+  }, [dispatch]);
 
   const Stack = createStackNavigator();
 
