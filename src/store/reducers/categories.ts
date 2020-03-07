@@ -1,41 +1,42 @@
 import {produce} from 'immer';
 import {
-  LOAD_QUIZZES,
-  LOAD_QUIZZES_FAIL,
-  LOAD_QUIZZES_SUCCESS,
-} from '../constants/quiz';
+  LOAD_CATEGORIES,
+  LOAD_CATEGORIES_SUCCESS,
+  LOAD_CATEGORIES_FAIL,
+  SET_CATEGORIES,
+} from '../constants/category';
 
 const initialState = {
   loading: false,
   loaded: false,
   errors: null,
-  data: {
-    entities: {
-      quizzes: {},
-    },
-    result: [],
-  },
+  data: {},
 };
 
-function quizzes(state = initialState, {type, payload}: any) {
+function categories(state = initialState, {type, payload}: any) {
   switch (type) {
-    case LOAD_QUIZZES:
+    case LOAD_CATEGORIES:
       return produce(state, (draftState: any) => {
         draftState.loading = true;
       });
 
-    case LOAD_QUIZZES_SUCCESS:
+    case LOAD_CATEGORIES_SUCCESS:
       return produce(state, (draftState: any) => {
-        draftState.data = payload;
+        draftState.errors = null;
         draftState.loading = false;
         draftState.loaded = true;
       });
 
-    case LOAD_QUIZZES_FAIL:
+    case LOAD_CATEGORIES_FAIL:
       return produce(state, (draftState: any) => {
-        draftState.errors = payload;
+        draftState.errors = payload.errors;
         draftState.loading = false;
         draftState.loaded = true;
+      });
+
+    case SET_CATEGORIES:
+      return produce(state, (draftState: any) => {
+        draftState.data = payload.categories;
       });
 
     default:
@@ -43,4 +44,4 @@ function quizzes(state = initialState, {type, payload}: any) {
   }
 }
 
-export {quizzes};
+export {categories};
