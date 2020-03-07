@@ -5,4 +5,5 @@ export const screens = {
   EditProfile: 'EditProfile',
   Categories: 'Categories',
   Chapters: 'Chapters',
+  InvalidDevice: 'InvalidDevice',
 };

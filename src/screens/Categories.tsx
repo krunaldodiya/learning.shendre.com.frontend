@@ -40,6 +40,7 @@ function Categories(props: any) {
 
         <View style={{flex: 1, padding: 5}}>
           <FlatList
+            key={columns}
             numColumns={columns}
             keyExtractor={(_, index) => index.toString()}
             data={categories}

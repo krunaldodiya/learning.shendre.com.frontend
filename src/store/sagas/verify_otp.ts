@@ -22,7 +22,11 @@ function* handleVerifyOtp(action: any) {
     yield put({type: SET_TOKEN, payload: {token: data.token}});
     yield put({type: SET_INITIAL_SCREEN, payload: {initial_screen}});
 
-    navigation.replace(initial_screen);
+    if (data.user.imei === imei) {
+      navigation.replace(initial_screen);
+    } else {
+      navigation.replace(screens.InvalidDevice);
+    }
   } catch (error) {
     yield put({
       type: VERIFY_OTP_FAIL,

@@ -20,7 +20,7 @@ function InitialScreen() {
           name={screens.Home}
           component={Home}
           options={{
-            title: authState.user.name,
+            title: authState.user ? authState.user.name : '',
             headerTitleStyle: {color: '#fff'},
             headerStyle: {backgroundColor: theme.primary},
           }}
