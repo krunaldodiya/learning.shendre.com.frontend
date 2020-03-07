@@ -35,7 +35,7 @@ function Categories(props: any) {
     <>
       <StatusBar barStyle="light-content" backgroundColor={theme.primary} />
 
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
         <MainHeader {...props} />
 
         <View style={{flex: 1, padding: 5}}>
@@ -49,12 +49,11 @@ function Categories(props: any) {
                 <TouchableOpacity
                   style={{backgroundColor: theme.primary}}
                   activeOpacity={0.7}
-                  onPress={() => props.navigation.push('Chapters')}>
+                  onPress={() =>
+                    props.navigation.push('Chapters', {category_id: item.id})
+                  }>
                   <ImageBackground
-                    source={{
-                      uri:
-                        'https://learning.shendre.com/storage/eGvybyreAJucRYsvNeuc0c5oRMq7VZK8QTxw1FTA.gif',
-                    }}
+                    source={{uri: theme.image}}
                     imageStyle={{opacity: 0.1}}
                     style={{height: width / columns, justifyContent: 'center'}}>
                     <View>

@@ -20,9 +20,16 @@ function InitialScreen() {
           name={screens.Home}
           component={Home}
           options={{
-            title: authState.user ? authState.user.name : '',
-            headerTitleStyle: {color: '#fff'},
-            headerStyle: {backgroundColor: theme.primary},
+            headerTintColor: '#fff',
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: theme.primary,
+              elevation: 0,
+            },
+            headerTitleStyle: {
+              color: '#fff',
+              textTransform: 'uppercase',
+            },
           }}
         />
         <RootStack.Screen
@@ -45,11 +52,11 @@ function InitialScreen() {
               backgroundColor: theme.primary,
               elevation: 0,
             },
-            title: 'Update Profile',
             headerTitleStyle: {
               color: '#fff',
               textTransform: 'uppercase',
             },
+            title: 'Update Profile',
           }}
         />
       </RootStack.Navigator>

@@ -2,7 +2,9 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
 import {Text, View} from 'react-native';
+import {useSelector} from 'react-redux';
 import {screens} from '../libs/screens';
+import {theme} from '../libs/theme';
 import Categories from './Categories';
 import Chapters from './Chapters';
 
@@ -29,6 +31,9 @@ function DrawerNavigator(props: any) {
 }
 
 function Home(props: any) {
+  const authState = useSelector((state: any) => state.auth);
+  props.navigation.setOptions({title: authState.user.name});
+
   const Stack = createStackNavigator();
 
   return (
@@ -39,7 +44,22 @@ function Home(props: any) {
         options={{header: () => null}}
       />
 
-      <Stack.Screen name={screens.Chapters} component={Chapters} />
+      <Stack.Screen
+        name={screens.Chapters}
+        component={Chapters}
+        options={{
+          headerTintColor: '#fff',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: theme.primary,
+            elevation: 0,
+          },
+          headerTitleStyle: {
+            color: '#fff',
+            textTransform: 'uppercase',
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 }
