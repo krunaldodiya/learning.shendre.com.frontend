@@ -8,7 +8,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {PERMISSIONS} from 'react-native-permissions';
 import {useDispatch, useSelector} from 'react-redux';
+import {getPermission} from '../libs/permission';
 import {theme} from '../libs/theme';
 import {setClientOtp, verifyOtp} from '../store/actions/otp';
 
@@ -19,10 +21,18 @@ function VerifyOtp(props: any) {
   const dispatch = useDispatch();
 
   const processVerifyOtp = async () => {
-    const imei = await IMEI.getImei();
-    dispatch(
-      verifyOtp(otpState.mobile, otpState.clientOtp, imei[0], props.navigation),
-    );
+    getPermission(PERMISSIONS.ANDROID.READ_PHONE_STATE).then(async () => {
+      const imei = await IMEI.getImei();
+
+      dispatch(
+        verifyOtp(
+          otpState.mobile,
+          otpState.clientOtp,
+          imei[0],
+          props.navigation,
+        ),
+      );
+    });
   };
 
   return (
