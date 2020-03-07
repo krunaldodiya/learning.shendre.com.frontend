@@ -19,7 +19,11 @@ function InitialScreen() {
         <RootStack.Screen
           name={screens.Home}
           component={Home}
-          options={{title: authState.user.name, headerStyle: {elevation: 0}}}
+          options={{
+            title: authState.user.name,
+            headerTitleStyle: {color: '#fff'},
+            headerStyle: {backgroundColor: theme.primary},
+          }}
         />
         <RootStack.Screen
           name={screens.RequestOtp}

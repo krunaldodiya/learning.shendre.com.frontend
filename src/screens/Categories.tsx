@@ -6,11 +6,15 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
+  ImageBackground,
 } from 'react-native';
-import Icon from 'react-native-dynamic-vector-icons';
 import {useDispatch, useSelector} from 'react-redux';
 import {theme} from '../libs/theme';
 import {loadCategories} from '../store/actions/load_categories';
+import MainHeader from './MainHeader';
+
+const {width} = Dimensions.get('window');
 
 function Categories(props: any) {
   const categoriesState = useSelector((state: any) => state.categories);
@@ -21,56 +25,59 @@ function Categories(props: any) {
     dispatch(loadCategories());
   }, [dispatch]);
 
-  const MainHeader = () => {
-    return (
-      <View
-        style={{
-          flexDirection: 'row',
-          backgroundColor: theme.primary,
-          padding: 15,
-          alignItems: 'center',
-        }}>
-        <View style={{}}>
-          <Icon
-            type="SimpleLineIcons"
-            name="menu"
-            color="#fff"
-            size={18}
-            style={{marginRight: 10}}
-            onPress={() => props.navigation.openDrawer()}
-          />
-        </View>
+  const categories = Object.keys(categoriesState.data).map(
+    id => categoriesState.data[id],
+  );
 
-        <View style={{}}>
-          <Text
-            style={{color: '#fff', fontSize: 18, textTransform: 'uppercase'}}>
-            Home
-          </Text>
-        </View>
-      </View>
-    );
-  };
+  const columns = categories.length === 1 ? 1 : 2;
 
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor={theme.primary} />
 
       <SafeAreaView style={{flex: 1}}>
-        <MainHeader />
+        <MainHeader {...props} />
 
-        <View style={{flex: 1, padding: 10}}>
+        <View style={{flex: 1, padding: 5}}>
           <FlatList
+            numColumns={columns}
             keyExtractor={(_, index) => index.toString()}
-            data={Object.keys(categoriesState.data).map(
-              id => categoriesState.data[id],
-            )}
+            data={categories}
             renderItem={({item}) => {
               return (
                 <TouchableOpacity
+                  style={{backgroundColor: theme.primary}}
+                  activeOpacity={0.7}
                   onPress={() => props.navigation.push('Chapters')}>
-                  <View>
-                    <Text>{item.name}</Text>
-                  </View>
+                  <ImageBackground
+                    source={{
+                      uri:
+                        'https://learning.shendre.com/storage/eGvybyreAJucRYsvNeuc0c5oRMq7VZK8QTxw1FTA.gif',
+                    }}
+                    imageStyle={{opacity: 0.1}}
+                    style={{height: width / columns, justifyContent: 'center'}}>
+                    <View>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontSize: 22,
+                          textAlign: 'center',
+                        }}>
+                        {item.name}
+                      </Text>
+
+                      <Text
+                        style={{
+                          color: '#ffff00',
+                          fontSize: 18,
+                          textAlign: 'center',
+                          marginTop: 20,
+                        }}>
+                        {item.chapters.length}
+                        {item.chapters.length > 1 ? ' Chapters' : ' Chapter'}
+                      </Text>
+                    </View>
+                  </ImageBackground>
                 </TouchableOpacity>
               );
             }}
