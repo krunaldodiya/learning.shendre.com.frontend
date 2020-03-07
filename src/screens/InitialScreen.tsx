@@ -4,22 +4,22 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
-import EditProfile from './EditProfile';
 import Home from './Home';
+import EditProfile from './EditProfile';
 import RequestOtp from './RequestOtp';
 import VerifyOtp from './VerifyOtp';
 
 function InitialScreen() {
   const RootStack = createStackNavigator();
-  const initialScreen = useSelector((state: any) => state.auth.initial_screen);
+  const authState = useSelector((state: any) => state.auth);
 
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName={initialScreen}>
+      <RootStack.Navigator initialRouteName={authState.initial_screen}>
         <RootStack.Screen
           name={screens.Home}
           component={Home}
-          options={{header: () => null}}
+          options={{title: authState.user.name, headerStyle: {elevation: 0}}}
         />
         <RootStack.Screen
           name={screens.RequestOtp}

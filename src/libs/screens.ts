@@ -3,4 +3,6 @@ export const screens = {
   VerifyOtp: 'VerifyOtp',
   Home: 'Home',
   EditProfile: 'EditProfile',
+  Categories: 'Categories',
+  Chapters: 'Chapters',
 };

@@ -18,6 +18,7 @@ function categories(state = initialState, {type, payload}: any) {
     case LOAD_CATEGORIES:
       return produce(state, (draftState: any) => {
         draftState.loading = true;
+        draftState.loaded = false;
       });
 
     case LOAD_CATEGORIES_SUCCESS:
