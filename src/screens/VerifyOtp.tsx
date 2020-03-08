@@ -8,31 +8,26 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {PERMISSIONS} from 'react-native-permissions';
+import {getUniqueId} from 'react-native-device-info';
 import {useDispatch, useSelector} from 'react-redux';
-import {getPermission} from '../libs/permission';
 import {theme} from '../libs/theme';
 import {setClientOtp, verifyOtp} from '../store/actions/otp';
-
-const IMEI = require('react-native-imei');
 
 function VerifyOtp(props: any) {
   const otpState = useSelector((state: any) => state.otp);
   const dispatch = useDispatch();
 
   const processVerifyOtp = async () => {
-    getPermission(PERMISSIONS.ANDROID.READ_PHONE_STATE).then(async () => {
-      const imei = await IMEI.getImei();
+    const uniqueId = getUniqueId();
 
-      dispatch(
-        verifyOtp(
-          otpState.mobile,
-          otpState.clientOtp,
-          imei[0],
-          props.navigation,
-        ),
-      );
-    });
+    dispatch(
+      verifyOtp(
+        otpState.mobile,
+        otpState.clientOtp,
+        uniqueId,
+        props.navigation,
+      ),
+    );
   };
 
   return (

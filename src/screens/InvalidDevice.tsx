@@ -8,8 +8,10 @@ function InvalidDevice(props: any) {
       <StatusBar barStyle="light-content" backgroundColor={theme.primary} />
 
       <SafeAreaView style={{flex: 1, backgroundColor: theme.primary}}>
-        <View style={{flex: 1, padding: 10}}>
-          <Text>Invalid Device</Text>
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <Text style={{color: '#fff', fontSize: 28, textAlign: 'center'}}>
+            Device already registered.
+          </Text>
         </View>
       </SafeAreaView>
     </>

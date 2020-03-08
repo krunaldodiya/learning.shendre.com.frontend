@@ -8,6 +8,7 @@ import Home from './Home';
 import EditProfile from './EditProfile';
 import RequestOtp from './RequestOtp';
 import VerifyOtp from './VerifyOtp';
+import InvalidDevice from './InvalidDevice';
 
 function InitialScreen() {
   const RootStack = createStackNavigator();
@@ -40,6 +41,11 @@ function InitialScreen() {
         <RootStack.Screen
           name={screens.VerifyOtp}
           component={VerifyOtp}
+          options={{header: () => null}}
+        />
+        <RootStack.Screen
+          name={screens.InvalidDevice}
+          component={InvalidDevice}
           options={{header: () => null}}
         />
         <RootStack.Screen

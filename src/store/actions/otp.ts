@@ -29,11 +29,11 @@ export function requestOtp(mobile: string, navigation: any) {
 export function verifyOtp(
   mobile: string,
   otp: string,
-  imei: string,
+  uniqueId: string,
   navigation: any,
 ) {
   return {
     type: VERIFY_OTP,
-    payload: {mobile, otp, imei, navigation},
+    payload: {mobile, otp, uniqueId, navigation},
   };
 }
