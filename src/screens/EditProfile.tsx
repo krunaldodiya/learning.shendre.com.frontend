@@ -12,8 +12,9 @@ import {
 import {TextInputMask} from 'react-native-masked-text';
 import {useDispatch, useSelector} from 'react-redux';
 import Avatar from '../components/Avatar';
+import {getMediaFile} from '../libs/media';
 import {theme} from '../libs/theme';
-import {apiUrl, baseUrl} from '../libs/vars';
+import {apiUrl} from '../libs/vars';
 import {updateProfile} from '../store/actions/auth';
 import {SET_USER, UPDATE_PROFILE_SUCCESS} from '../store/constants/auth';
 
@@ -63,7 +64,7 @@ function EditProfile(props: any) {
                 marginBottom: 30,
               }}>
               <Avatar
-                source={`${baseUrl}/avatar?avatar=${authState.user.avatar}`}
+                source={getMediaFile('avatar', authState.user.avatar)}
                 size={120}
                 onUploadSuccess={onUploadSuccess}
                 onUploadFail={onUploadFail}

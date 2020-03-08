@@ -1,15 +1,16 @@
 import React, {useEffect} from 'react';
 import {
+  Dimensions,
   FlatList,
+  ImageBackground,
   SafeAreaView,
   StatusBar,
   Text,
   TouchableOpacity,
   View,
-  Dimensions,
-  ImageBackground,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {getMediaFile} from '../libs/media';
 import {theme} from '../libs/theme';
 import {loadCategories} from '../store/actions/load_categories';
 import MainHeader from './MainHeader';
@@ -53,7 +54,7 @@ function Categories(props: any) {
                     props.navigation.push('Chapters', {category_id: item.id})
                   }>
                   <ImageBackground
-                    source={{uri: theme.image}}
+                    source={{uri: getMediaFile('category', item.image)}}
                     imageStyle={{opacity: 0.1}}
                     style={{height: width / columns, justifyContent: 'center'}}>
                     <View>

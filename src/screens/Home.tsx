@@ -27,7 +27,7 @@ function Home(props: any) {
   const dispatch = useDispatch();
 
   const authState = useSelector((state: any) => state.auth);
-  props.navigation.setOptions({title: authState.user.name});
+  props.navigation.setOptions({title: authState.user.institute.name});
 
   useEffect(() => {
     dispatch(getAuthUser());
