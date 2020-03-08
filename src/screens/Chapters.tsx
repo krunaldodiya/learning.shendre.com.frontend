@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import RazorpayCheckout from 'react-native-razorpay';
 import {useDispatch, useSelector} from 'react-redux';
@@ -33,7 +34,7 @@ function Chapters(props: any) {
   );
 
   const current_subscription = authState.user.subscriptions.filter(
-    (plan: any) => plan.category_id === category.id,
+    (subscription: any) => subscription.plan.category_id === category.id,
   )[0];
 
   const plan_info = authState.user.institute.plans.filter(
@@ -42,7 +43,7 @@ function Chapters(props: any) {
 
   const checkSubscription = (current_subscription: any) => {
     if (current_subscription) {
-      if (current_subscription.expires_at > moment()) {
+      if (moment(current_subscription.expires_at) > moment()) {
         return 'Subscribed';
       }
 
@@ -97,7 +98,7 @@ function Chapters(props: any) {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={{fontSize: 18}}>
+              <Text style={{fontSize: 18, textTransform: 'uppercase'}}>
                 {checkSubscription(current_subscription)}
               </Text>
 
@@ -105,19 +106,26 @@ function Chapters(props: any) {
                 <TouchableOpacity
                   onPress={() => handleSubscription(plan_info)}
                   style={{
-                    backgroundColor: 'red',
-                    borderRadius: 5,
-                    paddingHorizontal: 16,
+                    backgroundColor: '#ff6347',
                     paddingVertical: 8,
+                    paddingHorizontal: 15,
+                    borderRadius: 5,
+                    elevation: 5,
                   }}>
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontSize: 12,
-                      textTransform: 'uppercase',
-                    }}>
-                    Subscribe
-                  </Text>
+                  {authState.loading ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                  ) : (
+                    <Text
+                      style={{
+                        textTransform: 'uppercase',
+                        color: '#fff',
+                        textAlign: 'center',
+                        fontWeight: '700',
+                        fontSize: 12,
+                      }}>
+                      subscribe now
+                    </Text>
+                  )}
                 </TouchableOpacity>
               )}
             </View>
@@ -125,18 +133,14 @@ function Chapters(props: any) {
             {current_subscription && (
               <View
                 style={{
-                  padding: 5,
+                  padding: 10,
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                 }}>
-                <View>
-                  <Text style={{color: '#000'}}>Expiry Date</Text>
-                  <Text style={{color: '#000'}}>
-                    {moment(current_subscription.expires_at).format(
-                      'DD-MM-YYYY',
-                    )}
-                  </Text>
-                </View>
+                <Text style={{color: '#000'}}>Expiry Date</Text>
+                <Text style={{color: '#000'}}>
+                  {moment(current_subscription.expires_at).format('DD-MM-YYYY')}
+                </Text>
               </View>
             )}
           </View>
