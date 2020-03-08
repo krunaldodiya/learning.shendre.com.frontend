@@ -10,6 +10,7 @@ function Avatar(props: any) {
     const file: any = await ImagePicker.openPicker({
       multiple: false,
       mediaType: 'photo',
+      cropping: true,
     });
 
     const downloadTask = RNFetchBlob.fetch(
