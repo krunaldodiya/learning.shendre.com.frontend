@@ -9,6 +9,7 @@ import {
   GET_AUTH_USER,
   GET_AUTH_USER_SUCCESS,
   GET_AUTH_USER_FAIL,
+  UPDATE_SUBSCRIPTION_SUCCESS,
 } from '../constants/auth';
 
 const initialState = {
@@ -68,6 +69,10 @@ function auth(state = initialState, {type, payload}: any) {
 
     case UPDATE_PROFILE_FAIL: {
       return {...state, loading: false, loaded: true, errors: payload.errors};
+    }
+
+    case UPDATE_SUBSCRIPTION_SUCCESS: {
+      return {...state, user: payload.user};
     }
 
     default: {

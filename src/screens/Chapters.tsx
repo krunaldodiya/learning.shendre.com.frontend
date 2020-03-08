@@ -15,7 +15,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {getMediaFile} from '../libs/media';
 import {theme} from '../libs/theme';
 import {baseUrl} from '../libs/vars';
-import {SUBSCRIPTION_PURCHASED} from '../store/constants/auth';
+import {UPDATE_SUBSCRIPTION} from '../store/constants/auth';
 
 function Chapters(props: any) {
   const dispatch = useDispatch();
@@ -58,8 +58,7 @@ function Chapters(props: any) {
       image: `${baseUrl}/storage/${plan_info_meta.image}`,
       currency: 'INR',
       key: 'rzp_live_9zLV5vOpZrYX0u',
-      // amount: plan_info_meta.price * 100,
-      amount: 100,
+      amount: plan_info_meta.price * 100,
       name: plan_info_meta.name,
       prefill: {
         email: authState.user.email,
@@ -72,7 +71,7 @@ function Chapters(props: any) {
     RazorpayCheckout.open(options)
       .then((data: any) => {
         dispatch({
-          type: SUBSCRIPTION_PURCHASED,
+          type: UPDATE_SUBSCRIPTION,
           payload: {
             payment_id: data.razorpay_payment_id,
             plan_id: plan_info.id,
