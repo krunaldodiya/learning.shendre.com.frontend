@@ -33,7 +33,7 @@ const UserModel = types
         self.loading = false;
         self.loaded = true;
 
-        if (AppStore.auth.user.status === true) {
+        if (AppStore.auth.authUser.status === true) {
           navigation.pop();
         } else {
           navigation.replace(screens.Home);

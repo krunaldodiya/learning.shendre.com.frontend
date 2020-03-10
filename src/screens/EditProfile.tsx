@@ -1,6 +1,5 @@
-import {inject} from 'mobx-react';
-import {clone} from 'mobx-state-tree';
-import React from 'react';
+import {inject, observer} from 'mobx-react';
+import React, {useState} from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -19,23 +18,23 @@ import {apiUrl} from '../libs/vars';
 
 function EditProfile({store, navigation}: any) {
   const {auth, user} = store;
-  const {setUser, updateProfile} = user;
 
-  const editableUser = clone(auth.authUser);
-  console.log(editableUser);
+  const {authUser} = auth;
+  const {updateProfile, loading} = user;
 
-  const onUploadSuccess = async (response: any) => {
-    const {filename} = response.json();
+  const [editableUser, setEditableUser] = useState(authUser);
 
-    setUser({...auth.authUser, avatar: filename});
+  const onUploadSuccess = async ({filename}: any) => {
+    const userData = {...editableUser, avatar: filename};
+    user.addUser(userData);
   };
 
   const onUploadFail = async (error: any) => {
     console.log(error);
   };
 
-  const processEditProfile = async () => {
-    updateProfile(auth.authUser, navigation);
+  const processUpdateProfile = async () => {
+    updateProfile({user: editableUser, navigation});
   };
 
   return (
@@ -57,7 +56,7 @@ function EditProfile({store, navigation}: any) {
                 marginBottom: 30,
               }}>
               <Avatar
-                source={getMediaFile('avatar', auth.authUser.avatar)}
+                source={getMediaFile('avatar', editableUser.avatar)}
                 size={120}
                 onUploadSuccess={onUploadSuccess}
                 onUploadFail={onUploadFail}
@@ -80,9 +79,9 @@ function EditProfile({store, navigation}: any) {
                   elevation: 5,
                 }}
                 placeholder="Full Name"
-                value={auth.authUser.name}
+                value={editableUser.name}
                 onChangeText={fullName => {
-                  setUser({...auth.authUser, name: fullName});
+                  setEditableUser({...editableUser, name: fullName});
                 }}
               />
 
@@ -103,9 +102,9 @@ function EditProfile({store, navigation}: any) {
                   elevation: 5,
                 }}
                 placeholder="Email Address"
-                value={auth.authUser.email}
+                value={editableUser.email}
                 onChangeText={emailAddress => {
-                  setUser({...auth.authUser, email: emailAddress});
+                  setEditableUser({...editableUser, email: emailAddress});
                 }}
               />
 
@@ -128,9 +127,9 @@ function EditProfile({store, navigation}: any) {
                 placeholder="Date of Birth (DD/MM/YYYY)"
                 type={'datetime'}
                 options={{format: 'DD/MM/YYYY'}}
-                value={auth.authUser.dob}
+                value={editableUser.dob}
                 onChangeText={text => {
-                  setUser({...auth.authUser, dob: text});
+                  setEditableUser({...editableUser, dob: text});
                 }}
               />
 
@@ -150,12 +149,14 @@ function EditProfile({store, navigation}: any) {
                 padding: 2,
               }}>
               <TouchableOpacity
-                onPress={() => setUser({...auth.authUser, gender: 'Male'})}
+                onPress={() => {
+                  setEditableUser({...editableUser, gender: 'Male'});
+                }}
                 style={{
                   flex: 1,
                   padding: 12,
                   backgroundColor:
-                    auth.authUser.gender === 'Male' ? '#ff6347' : '#fff',
+                    editableUser.gender === 'Male' ? '#ff6347' : '#fff',
                   borderRadius: 50,
                 }}>
                 <Text
@@ -164,18 +165,20 @@ function EditProfile({store, navigation}: any) {
                     textAlign: 'center',
                     textTransform: 'uppercase',
                     fontSize: 14,
-                    color: auth.authUser.gender === 'Male' ? '#fff' : '#000',
+                    color: editableUser.gender === 'Male' ? '#fff' : '#000',
                   }}>
                   Male
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => setUser({...auth.authUser, gender: 'Female'})}
+                onPress={() => {
+                  setEditableUser({...editableUser, gender: 'Female'});
+                }}
                 style={{
                   flex: 1,
                   padding: 12,
                   backgroundColor:
-                    auth.authUser.gender === 'Female' ? '#ff6347' : '#fff',
+                    editableUser.gender === 'Female' ? '#ff6347' : '#fff',
                   borderRadius: 50,
                 }}>
                 <Text
@@ -184,7 +187,7 @@ function EditProfile({store, navigation}: any) {
                     textAlign: 'center',
                     textTransform: 'uppercase',
                     fontSize: 14,
-                    color: auth.authUser.gender === 'Female' ? '#fff' : '#000',
+                    color: editableUser.gender === 'Female' ? '#fff' : '#000',
                   }}>
                   Female
                 </Text>
@@ -201,9 +204,9 @@ function EditProfile({store, navigation}: any) {
                   elevation: 5,
                 }}
                 placeholder="School Name"
-                value={auth.authUser.school}
+                value={editableUser.school}
                 onChangeText={schoolName => {
-                  setUser({...auth.authUser, school: schoolName});
+                  setEditableUser({...editableUser, school: schoolName});
                 }}
               />
 
@@ -224,9 +227,9 @@ function EditProfile({store, navigation}: any) {
                   elevation: 5,
                 }}
                 placeholder="Class"
-                value={auth.authUser.class}
+                value={editableUser.class}
                 onChangeText={className => {
-                  setUser({...auth.authUser, class: className});
+                  setEditableUser({...editableUser, class: className});
                 }}
               />
 
@@ -239,14 +242,15 @@ function EditProfile({store, navigation}: any) {
 
             <View style={{marginTop: 10, marginBottom: 10}}>
               <TouchableOpacity
-                onPress={processEditProfile}
+                onPress={processUpdateProfile}
+                disabled={loading}
                 style={{
                   backgroundColor: '#ff6347',
                   padding: 10,
                   borderRadius: 50,
                   elevation: 5,
                 }}>
-                {auth.loading ? (
+                {loading ? (
                   <ActivityIndicator size="small" color="#fff" />
                 ) : (
                   <Text
@@ -269,4 +273,4 @@ function EditProfile({store, navigation}: any) {
   );
 }
 
-export default inject('store')(EditProfile);
+export default inject('store')(observer(EditProfile));

@@ -1,12 +1,13 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
+import {inject, observer} from 'mobx-react';
 import React, {useEffect} from 'react';
 import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
 import Categories from './Categories';
 import Chapters from './Chapters';
 import DrawerMenu from './DrawerMenu';
-import {inject} from 'mobx-react';
+import EditProfile from './EditProfile';
 
 function DrawerNavigator() {
   const Drawer = createDrawerNavigator();
@@ -58,8 +59,26 @@ function Home({store, navigation}: any) {
           },
         }}
       />
+
+      <Stack.Screen
+        name={screens.EditProfile}
+        component={EditProfile}
+        options={{
+          headerTintColor: '#fff',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: theme.primary,
+            elevation: 0,
+          },
+          headerTitleStyle: {
+            color: '#fff',
+            textTransform: 'uppercase',
+          },
+          title: 'Update Profile',
+        }}
+      />
     </Stack.Navigator>
   );
 }
 
-export default inject('store')(Home);
+export default inject('store')(observer(Home));

@@ -2,10 +2,16 @@ import React from 'react';
 import {Image, TouchableOpacity} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import RNFetchBlob from 'rn-fetch-blob';
+import {observer} from 'mobx-react';
 
-function Avatar(props: any) {
-  const {size, source, onUploadSuccess, onUploadFail, token, uploadUrl} = props;
-
+function Avatar({
+  size,
+  source,
+  onUploadSuccess,
+  onUploadFail,
+  token,
+  uploadUrl,
+}: any) {
   const uploadAvatar = async () => {
     const file: any = await ImagePicker.openPicker({
       multiple: false,
@@ -31,6 +37,7 @@ function Avatar(props: any) {
     );
 
     downloadTask
+      .then(response => response.json())
       .then(response => onUploadSuccess(response))
       .catch(error => onUploadFail(error));
   };
@@ -60,4 +67,4 @@ function Avatar(props: any) {
   );
 }
 
-export default Avatar;
+export default observer(Avatar);

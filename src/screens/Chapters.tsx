@@ -17,6 +17,7 @@ import {getMediaFile} from '../libs/media';
 import {theme} from '../libs/theme';
 import {baseUrl} from '../libs/vars';
 import {UPDATE_SUBSCRIPTION} from '../store/constants/auth';
+import {inject, observer} from 'mobx-react';
 
 function Chapters(props: any) {
   const dispatch = useDispatch();
@@ -215,4 +216,4 @@ function Chapters(props: any) {
   );
 }
 
-export default Chapters;
+export default inject('store')(observer(Chapters));
