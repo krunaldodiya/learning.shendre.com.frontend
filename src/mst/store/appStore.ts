@@ -7,47 +7,48 @@ import CategoryModel from '../models/categoryModel';
 import OtpModel from '../models/otpModel';
 import UserModel from '../models/userModel';
 
-const AppStore = types
-  .model('AppModel', {
-    rehydrated: types.boolean,
-    auth: AuthModel,
-    user: UserModel,
-    otp: OtpModel,
-    category: CategoryModel,
-  })
-  .actions(self => ({
-    setRehydrated() {
-      self.rehydrated = true;
-    },
-  }))
-  .create({
-    rehydrated: false,
-    auth: {
-      initial_screen: screens.RequestOtp,
-      loading: false,
-      loaded: false,
-      token: '',
-      authUser: null,
-    },
-    user: {
-      loading: false,
-      loaded: false,
-      users: [],
-    },
-    otp: {
-      loading: false,
-      loaded: false,
-      mobile: '',
-      clientOtp: '',
-      serverOtp: '',
-      errors: null,
-    },
-    category: {
-      loading: false,
-      loaded: false,
-      categories: [],
-    },
-  });
+const AppModel = types.model('AppModel', {
+  rehydrated: types.boolean,
+  auth: AuthModel,
+  user: UserModel,
+  otp: OtpModel,
+  category: CategoryModel,
+});
+
+const initialState = {
+  rehydrated: false,
+  auth: {
+    initial_screen: screens.RequestOtp,
+    loading: false,
+    loaded: false,
+    token: '',
+    authUser: null,
+  },
+  user: {
+    loading: false,
+    loaded: false,
+    users: [],
+  },
+  otp: {
+    loading: false,
+    loaded: false,
+    mobile: '',
+    clientOtp: '',
+    serverOtp: '',
+    errors: null,
+  },
+  category: {
+    loading: false,
+    loaded: false,
+    categories: [],
+  },
+};
+
+const AppStore = AppModel.actions(self => ({
+  setRehydrated() {
+    self.rehydrated = true;
+  },
+})).create(initialState);
 
 persist('@root', AppStore, {
   storage: AsyncStorage,

@@ -1,4 +1,4 @@
-import {observer} from 'mobx-react';
+import {inject, observer} from 'mobx-react';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -10,15 +10,14 @@ import {
   View,
 } from 'react-native';
 import {theme} from '../libs/theme';
-import AppStore from '../mst/store/appStore';
 
-function RequestOtp(props: any) {
-  const {otp} = AppStore;
+function RequestOtp({store, navigation}: any) {
+  const {otp} = store;
 
   const {requestOtp, setMobile, loading, mobile, getError, isDisabled} = otp;
 
   const processRequestOtp = async () => {
-    await requestOtp(mobile, props.navigation);
+    await requestOtp(mobile, navigation);
   };
 
   return (
@@ -103,4 +102,4 @@ function RequestOtp(props: any) {
   );
 }
 
-export default observer(RequestOtp);
+export default inject('store')(observer(RequestOtp));

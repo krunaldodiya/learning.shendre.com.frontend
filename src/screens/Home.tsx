@@ -3,10 +3,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
 import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
-import AppStore from '../mst/store/appStore';
 import Categories from './Categories';
 import Chapters from './Chapters';
 import DrawerMenu from './DrawerMenu';
+import {inject} from 'mobx-react';
 
 function DrawerNavigator() {
   const Drawer = createDrawerNavigator();
@@ -22,11 +22,11 @@ function DrawerNavigator() {
   );
 }
 
-function Home(props: any) {
-  const {auth} = AppStore;
+function Home({store, navigation}: any) {
+  const {auth} = store;
   const {authUser, getAuthUser} = auth;
 
-  props.navigation.setOptions({title: authUser?.name});
+  navigation.setOptions({title: authUser.institute.name});
 
   useEffect(() => {
     getAuthUser();
@@ -62,4 +62,4 @@ function Home(props: any) {
   );
 }
 
-export default Home;
+export default inject('store')(Home);

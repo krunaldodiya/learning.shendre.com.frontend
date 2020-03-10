@@ -1,4 +1,4 @@
-import {observer} from 'mobx-react';
+import {observer, Provider} from 'mobx-react';
 import React from 'react';
 import {ActivityIndicator} from 'react-native';
 import AppStore from './src/mst/store/appStore';
@@ -11,7 +11,11 @@ function App() {
     return <ActivityIndicator style={{flex: 1, justifyContent: 'center'}} />;
   }
 
-  return <InitialScreen initial_screen={auth.initial_screen} />;
+  return (
+    <Provider store={AppStore}>
+      <InitialScreen initial_screen={auth.initial_screen} />
+    </Provider>
+  );
 }
 
 export default observer(App);

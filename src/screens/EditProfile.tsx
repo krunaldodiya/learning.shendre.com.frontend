@@ -1,3 +1,5 @@
+import {inject} from 'mobx-react';
+import {clone} from 'mobx-state-tree';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -10,27 +12,22 @@ import {
   View,
 } from 'react-native';
 import {TextInputMask} from 'react-native-masked-text';
-import {useDispatch, useSelector} from 'react-redux';
 import Avatar from '../components/Avatar';
 import {getMediaFile} from '../libs/media';
 import {theme} from '../libs/theme';
 import {apiUrl} from '../libs/vars';
-import {updateProfile} from '../store/actions/auth';
-import {SET_USER, UPDATE_PROFILE_SUCCESS} from '../store/constants/auth';
 
-function EditProfile(props: any) {
-  const dispatch = useDispatch();
-  const authState = useSelector((state: any) => state.auth);
+function EditProfile({store, navigation}: any) {
+  const {auth, user} = store;
+  const {setUser, updateProfile} = user;
+
+  const editableUser = clone(auth.authUser);
+  console.log(editableUser);
 
   const onUploadSuccess = async (response: any) => {
     const {filename} = response.json();
 
-    dispatch({
-      type: UPDATE_PROFILE_SUCCESS,
-      payload: {
-        user: {...authState.user, avatar: filename},
-      },
-    });
+    setUser({...auth.authUser, avatar: filename});
   };
 
   const onUploadFail = async (error: any) => {
@@ -38,11 +35,7 @@ function EditProfile(props: any) {
   };
 
   const processEditProfile = async () => {
-    dispatch(updateProfile(authState.user, props.navigation));
-  };
-
-  const setUser = async (user: any) => {
-    dispatch({type: SET_USER, payload: {user}});
+    updateProfile(auth.authUser, navigation);
   };
 
   return (
@@ -64,11 +57,11 @@ function EditProfile(props: any) {
                 marginBottom: 30,
               }}>
               <Avatar
-                source={getMediaFile('avatar', authState.user.avatar)}
+                source={getMediaFile('avatar', auth.authUser.avatar)}
                 size={120}
                 onUploadSuccess={onUploadSuccess}
                 onUploadFail={onUploadFail}
-                token={authState.token}
+                token={auth.token}
                 uploadUrl={`${apiUrl}/upload/avatar`}
               />
 
@@ -87,15 +80,15 @@ function EditProfile(props: any) {
                   elevation: 5,
                 }}
                 placeholder="Full Name"
-                value={authState.user.name}
+                value={auth.authUser.name}
                 onChangeText={fullName => {
-                  setUser({...authState.user, name: fullName});
+                  setUser({...auth.authUser, name: fullName});
                 }}
               />
 
-              {authState.errors && authState.errors.errors.name && (
+              {auth.errors && auth.errors.errors.name && (
                 <Text style={{color: '#ff6347', marginLeft: 5, marginTop: 5}}>
-                  {authState.errors.errors.name}
+                  {auth.errors.errors.name}
                 </Text>
               )}
             </View>
@@ -110,15 +103,15 @@ function EditProfile(props: any) {
                   elevation: 5,
                 }}
                 placeholder="Email Address"
-                value={authState.user.email}
+                value={auth.authUser.email}
                 onChangeText={emailAddress => {
-                  setUser({...authState.user, email: emailAddress});
+                  setUser({...auth.authUser, email: emailAddress});
                 }}
               />
 
-              {authState.errors && authState.errors.errors.email && (
+              {auth.errors && auth.errors.errors.email && (
                 <Text style={{color: '#ff6347', marginLeft: 5, marginTop: 5}}>
-                  {authState.errors.errors.email}
+                  {auth.errors.errors.email}
                 </Text>
               )}
             </View>
@@ -135,15 +128,15 @@ function EditProfile(props: any) {
                 placeholder="Date of Birth (DD/MM/YYYY)"
                 type={'datetime'}
                 options={{format: 'DD/MM/YYYY'}}
-                value={authState.user.dob}
+                value={auth.authUser.dob}
                 onChangeText={text => {
-                  setUser({...authState.user, dob: text});
+                  setUser({...auth.authUser, dob: text});
                 }}
               />
 
-              {authState.errors && authState.errors.errors.dob && (
+              {auth.errors && auth.errors.errors.dob && (
                 <Text style={{color: '#ff6347', marginLeft: 5, marginTop: 5}}>
-                  {authState.errors.errors.dob}
+                  {auth.errors.errors.dob}
                 </Text>
               )}
             </View>
@@ -157,12 +150,12 @@ function EditProfile(props: any) {
                 padding: 2,
               }}>
               <TouchableOpacity
-                onPress={() => setUser({...authState.user, gender: 'Male'})}
+                onPress={() => setUser({...auth.authUser, gender: 'Male'})}
                 style={{
                   flex: 1,
                   padding: 12,
                   backgroundColor:
-                    authState.user.gender === 'Male' ? '#ff6347' : '#fff',
+                    auth.authUser.gender === 'Male' ? '#ff6347' : '#fff',
                   borderRadius: 50,
                 }}>
                 <Text
@@ -171,18 +164,18 @@ function EditProfile(props: any) {
                     textAlign: 'center',
                     textTransform: 'uppercase',
                     fontSize: 14,
-                    color: authState.user.gender === 'Male' ? '#fff' : '#000',
+                    color: auth.authUser.gender === 'Male' ? '#fff' : '#000',
                   }}>
                   Male
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => setUser({...authState.user, gender: 'Female'})}
+                onPress={() => setUser({...auth.authUser, gender: 'Female'})}
                 style={{
                   flex: 1,
                   padding: 12,
                   backgroundColor:
-                    authState.user.gender === 'Female' ? '#ff6347' : '#fff',
+                    auth.authUser.gender === 'Female' ? '#ff6347' : '#fff',
                   borderRadius: 50,
                 }}>
                 <Text
@@ -191,7 +184,7 @@ function EditProfile(props: any) {
                     textAlign: 'center',
                     textTransform: 'uppercase',
                     fontSize: 14,
-                    color: authState.user.gender === 'Female' ? '#fff' : '#000',
+                    color: auth.authUser.gender === 'Female' ? '#fff' : '#000',
                   }}>
                   Female
                 </Text>
@@ -208,15 +201,15 @@ function EditProfile(props: any) {
                   elevation: 5,
                 }}
                 placeholder="School Name"
-                value={authState.user.school}
+                value={auth.authUser.school}
                 onChangeText={schoolName => {
-                  setUser({...authState.user, school: schoolName});
+                  setUser({...auth.authUser, school: schoolName});
                 }}
               />
 
-              {authState.errors && authState.errors.errors.school && (
+              {auth.errors && auth.errors.errors.school && (
                 <Text style={{color: '#ff6347', marginLeft: 5, marginTop: 5}}>
-                  {authState.errors.errors.school}
+                  {auth.errors.errors.school}
                 </Text>
               )}
             </View>
@@ -231,15 +224,15 @@ function EditProfile(props: any) {
                   elevation: 5,
                 }}
                 placeholder="Class"
-                value={authState.user.class}
+                value={auth.authUser.class}
                 onChangeText={className => {
-                  setUser({...authState.user, class: className});
+                  setUser({...auth.authUser, class: className});
                 }}
               />
 
-              {authState.errors && authState.errors.errors.class && (
+              {auth.errors && auth.errors.errors.class && (
                 <Text style={{color: '#ff6347', marginLeft: 5, marginTop: 5}}>
-                  {authState.errors.errors.class}
+                  {auth.errors.errors.class}
                 </Text>
               )}
             </View>
@@ -253,7 +246,7 @@ function EditProfile(props: any) {
                   borderRadius: 50,
                   elevation: 5,
                 }}>
-                {authState.loading ? (
+                {auth.loading ? (
                   <ActivityIndicator size="small" color="#fff" />
                 ) : (
                   <Text
@@ -276,4 +269,4 @@ function EditProfile(props: any) {
   );
 }
 
-export default EditProfile;
+export default inject('store')(EditProfile);

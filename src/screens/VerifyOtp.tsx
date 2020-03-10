@@ -1,4 +1,4 @@
-import {observer} from 'mobx-react';
+import {inject, observer} from 'mobx-react';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -14,12 +14,11 @@ import {getUniqueId} from 'react-native-device-info';
 import {PERMISSIONS} from 'react-native-permissions';
 import {getPermission} from '../libs/permission';
 import {theme} from '../libs/theme';
-import AppStore from '../mst/store/appStore';
 
 const IMEI = require('react-native-imei');
 
-function VerifyOtp(props: any) {
-  const {otp} = AppStore;
+function VerifyOtp({store, navigation}: any) {
+  const {otp} = store;
 
   const {
     verifyOtp,
@@ -43,7 +42,7 @@ function VerifyOtp(props: any) {
     const uniqueId = getUniqueId();
     const imei = await IMEI.getImei();
 
-    await verifyOtp(mobile, clientOtp, uniqueId, imei, props.navigation);
+    await verifyOtp(mobile, clientOtp, uniqueId, imei, navigation);
   };
 
   return (
@@ -138,4 +137,4 @@ function VerifyOtp(props: any) {
   );
 }
 
-export default observer(VerifyOtp);
+export default inject('store')(observer(VerifyOtp));

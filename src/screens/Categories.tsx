@@ -1,3 +1,4 @@
+import {inject, observer} from 'mobx-react';
 import React, {useEffect} from 'react';
 import {
   Dimensions,
@@ -11,27 +12,26 @@ import {
 } from 'react-native';
 import {getMediaFile} from '../libs/media';
 import {theme} from '../libs/theme';
-import AppStore from '../mst/store/appStore';
 import MainHeader from './MainHeader';
 
 const {width} = Dimensions.get('window');
 
-function Categories(props: any) {
-  const {category} = AppStore;
+function Categories({store, navigation}: any) {
+  const {category} = store;
   const {loadCategories, categories} = category;
 
   useEffect(() => {
     loadCategories();
   }, [loadCategories]);
 
-  const columns = categories.length === 1 ? 1 : 2;
+  const columns = categories.length < 6 ? 1 : 2;
 
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor={theme.primary} />
 
       <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-        <MainHeader {...props} />
+        <MainHeader navigation={navigation} />
 
         <View style={{flex: 1, padding: 2}}>
           <FlatList
@@ -45,7 +45,7 @@ function Categories(props: any) {
                   style={{backgroundColor: theme.primary, margin: 2}}
                   activeOpacity={0.7}
                   onPress={() =>
-                    props.navigation.push('Chapters', {category_id: item.id})
+                    navigation.push('Chapters', {category_id: item.id})
                   }>
                   <ImageBackground
                     source={{uri: getMediaFile('category', item.image)}}
@@ -87,4 +87,4 @@ function Categories(props: any) {
   );
 }
 
-export default Categories;
+export default inject('store')(observer(Categories));

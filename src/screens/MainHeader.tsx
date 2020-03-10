@@ -4,7 +4,7 @@ import Icon from 'react-native-dynamic-vector-icons';
 import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
 
-function MainHeader(props: any) {
+function MainHeader({navigation}: any) {
   return (
     <View
       style={{
@@ -20,7 +20,7 @@ function MainHeader(props: any) {
           name="menu"
           color="#fff"
           size={22}
-          onPress={() => props.navigation.openDrawer()}
+          onPress={() => navigation.openDrawer()}
         />
       </View>
 
@@ -36,7 +36,7 @@ function MainHeader(props: any) {
           name="person"
           color="#fff"
           size={22}
-          onPress={() => props.navigation.push(screens.EditProfile)}
+          onPress={() => navigation.push(screens.EditProfile)}
         />
       </View>
     </View>
