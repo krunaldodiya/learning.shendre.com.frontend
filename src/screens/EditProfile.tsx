@@ -34,7 +34,7 @@ function EditProfile({store, navigation}: any) {
   };
 
   const processUpdateProfile = async () => {
-    updateProfile({user: editableUser, navigation});
+    updateProfile({navigation});
   };
 
   return (

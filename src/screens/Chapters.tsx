@@ -1,6 +1,8 @@
+import {inject, observer} from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
 import {
+  ActivityIndicator,
   Alert,
   FlatList,
   Image,
@@ -9,42 +11,34 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ActivityIndicator,
 } from 'react-native';
 import RazorpayCheckout from 'react-native-razorpay';
-import {useDispatch, useSelector} from 'react-redux';
-import {getMediaFile} from '../libs/media';
 import {theme} from '../libs/theme';
 import {baseUrl} from '../libs/vars';
-import {UPDATE_SUBSCRIPTION} from '../store/constants/auth';
-import {inject, observer} from 'mobx-react';
 
-function Chapters(props: any) {
-  const dispatch = useDispatch();
-  const {category_id} = props.route.params;
+function Chapters({store, navigation, route}: any) {
+  const {category, auth, user} = store;
+  const {authUser} = auth;
+  const {categories} = category;
+  const {updateSubscription, loading} = user;
 
-  const authState = useSelector((state: any) => state.auth);
-  const categoriesState = useSelector((state: any) => state.categories);
-  const chaptersState = useSelector((state: any) => state.chapters);
+  const {category_id} = route.params;
 
-  const category = categoriesState.data[category_id];
-  props.navigation.setOptions({title: category.name});
+  const categoryById = categories.find((cat: any) => cat.id === category_id);
 
-  const chapters = category.chapters.map(
-    (chapter_id: any) => chaptersState.data[chapter_id],
+  navigation.setOptions({title: categoryById.name});
+
+  const subscription = authUser.subscriptions.find(
+    (sbs: any) => sbs.plan.category_id === category_id,
   );
 
-  const current_subscription = authState.user.subscriptions.filter(
-    (subscription: any) => subscription.plan.category_id === category.id,
-  )[0];
+  const plan = authUser.institute.plans.find(
+    (pl: any) => pl.category_id === category_id,
+  );
 
-  const plan_info = authState.user.institute.plans.filter(
-    (plan: any) => plan.category_id === category.id,
-  )[0];
-
-  const checkSubscription = (current_subscription: any) => {
-    if (current_subscription) {
-      if (moment(current_subscription.expires_at) > moment()) {
+  const checkSubscription = (subscription_meta: any) => {
+    if (subscription_meta) {
+      if (moment(subscription_meta.expires_at) > moment()) {
         return 'Subscribed';
       }
 
@@ -54,30 +48,27 @@ function Chapters(props: any) {
     return 'Not Subscribed';
   };
 
-  const handleSubscription = (plan_info_meta: any) => {
+  const handleSubscription = (plan_meta: any) => {
     var options = {
-      description: plan_info_meta.description,
-      image: `${baseUrl}/storage/${plan_info_meta.image}`,
+      description: plan_meta.description,
+      image: `${baseUrl}/storage/${plan_meta.image}`,
       currency: 'INR',
       key: 'rzp_live_9zLV5vOpZrYX0u',
-      amount: plan_info_meta.price * 100,
-      name: plan_info_meta.name,
+      amount: plan_meta.price * 100,
+      name: plan_meta.name,
       prefill: {
-        email: authState.user.email,
-        contact: authState.user.mobile,
-        name: authState.user.name,
+        email: authUser.email,
+        contact: authUser.mobile,
+        name: authUser.name,
       },
       theme: {color: '#F37254'},
     };
 
     RazorpayCheckout.open(options)
       .then((data: any) => {
-        dispatch({
-          type: UPDATE_SUBSCRIPTION,
-          payload: {
-            payment_id: data.razorpay_payment_id,
-            plan_id: plan_info.id,
-          },
+        updateSubscription({
+          payment_id: data.razorpay_payment_id,
+          plan_id: plan.id,
         });
       })
       .catch((error: any) => {
@@ -100,12 +91,12 @@ function Chapters(props: any) {
                 alignItems: 'center',
               }}>
               <Text style={{fontSize: 18, textTransform: 'uppercase'}}>
-                {checkSubscription(current_subscription)}
+                {checkSubscription(subscription)}
               </Text>
 
-              {checkSubscription(current_subscription) !== 'Subscribed' && (
+              {checkSubscription(subscription) !== 'Subscribed' && (
                 <TouchableOpacity
-                  onPress={() => handleSubscription(plan_info)}
+                  onPress={() => handleSubscription(plan)}
                   style={{
                     backgroundColor: '#ff6347',
                     paddingVertical: 8,
@@ -113,7 +104,7 @@ function Chapters(props: any) {
                     borderRadius: 5,
                     elevation: 5,
                   }}>
-                  {authState.loading ? (
+                  {loading ? (
                     <ActivityIndicator size="small" color="#fff" />
                   ) : (
                     <Text
@@ -131,7 +122,7 @@ function Chapters(props: any) {
               )}
             </View>
 
-            {current_subscription && (
+            {subscription && (
               <View
                 style={{
                   padding: 10,
@@ -140,7 +131,7 @@ function Chapters(props: any) {
                 }}>
                 <Text style={{color: '#000'}}>Expiry Date</Text>
                 <Text style={{color: '#000'}}>
-                  {moment(current_subscription.expires_at).format('DD-MM-YYYY')}
+                  {moment(subscription.expires_at).format('DD-MM-YYYY')}
                 </Text>
               </View>
             )}
@@ -155,7 +146,7 @@ function Chapters(props: any) {
           <View style={{marginHorizontal: 10}}>
             <FlatList
               keyExtractor={(_, index) => index.toString()}
-              data={chapters}
+              data={categoryById.chapters}
               renderItem={({item}) => {
                 return (
                   <TouchableOpacity
@@ -163,9 +154,10 @@ function Chapters(props: any) {
                       backgroundColor: '#fff',
                       padding: 10,
                       borderRadius: 5,
+                      marginBottom: 5,
                     }}
                     activeOpacity={0.7}
-                    onPress={() => props.navigation.push('Chapters')}>
+                    onPress={() => navigation.push('Chapters')}>
                     <View
                       style={{
                         flexDirection: 'row',
@@ -178,7 +170,9 @@ function Chapters(props: any) {
                           marginRight: 10,
                         }}>
                         <Image
-                          source={{uri: getMediaFile('chapter', item.image)}}
+                          source={{
+                            uri: `https://api.shendre.com/${item.image}`,
+                          }}
                           style={{
                             width: 40,
                             height: 40,
@@ -191,7 +185,9 @@ function Chapters(props: any) {
                         <Text style={{fontSize: 18, fontWeight: 'bold'}}>
                           {item.name}
                         </Text>
-                        <Text style={{fontSize: 14, fontWeight: 'normal'}}>
+                        <Text
+                          style={{fontSize: 14, fontWeight: 'normal'}}
+                          numberOfLines={1}>
                           {item.description}
                         </Text>
                       </View>

@@ -1,5 +1,6 @@
 import {flow, types} from 'mobx-state-tree';
 import {updateProfile} from '../../api/update_profile';
+import {updateSubscription} from '../../api/update_subscription';
 import {screens} from '../../libs/screens';
 import AppStore from '../store/appStore';
 import User from '../types/user';
@@ -21,24 +22,51 @@ const UserModel = types
       }
     }),
 
-    updateProfile: flow(function*({user, navigation}) {
+    updateProfile: flow(function*({navigation}) {
+      const {token, authUser} = AppStore.auth;
+
       self.loading = true;
 
       try {
-        const {data} = yield updateProfile({user, token: AppStore.auth.token});
-        const index = self.users.findIndex(u => u.id === user.id);
+        const {data} = yield updateProfile({user: authUser, token});
 
+        const index = self.users.findIndex(u => u.id === authUser.id);
         self.users[index] = data.user;
 
         self.loading = false;
         self.loaded = true;
 
-        if (AppStore.auth.authUser.status === true) {
+        if (authUser.status === true) {
           navigation.pop();
         } else {
           navigation.replace(screens.Home);
         }
       } catch (error) {
+        self.loading = false;
+        self.loaded = true;
+      }
+    }),
+
+    updateSubscription: flow(function*({plan_id, payment_id}) {
+      const {token, authUser} = AppStore.auth;
+
+      self.loading = true;
+
+      try {
+        const {data} = yield updateSubscription({
+          plan_id,
+          payment_id,
+          token,
+        });
+
+        const index = self.users.findIndex(u => u.id === authUser.id);
+        self.users[index] = data.user;
+
+        self.loading = false;
+        self.loaded = true;
+      } catch (error) {
+        console.log(error);
+
         self.loading = false;
         self.loaded = true;
       }
