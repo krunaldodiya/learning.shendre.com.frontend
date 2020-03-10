@@ -22,21 +22,21 @@ const UserModel = types
       }
     }),
 
-    updateProfile: flow(function*({navigation}) {
-      const {token, authUser} = AppStore.auth;
+    updateProfile: flow(function*({editableUser, navigation}) {
+      const {token} = AppStore.auth;
 
       self.loading = true;
 
       try {
-        const {data} = yield updateProfile({user: authUser, token});
+        const {data} = yield updateProfile({user: editableUser, token});
 
-        const index = self.users.findIndex(u => u.id === authUser.id);
+        const index = self.users.findIndex(u => u.id === data.user.id);
         self.users[index] = data.user;
 
         self.loading = false;
         self.loaded = true;
 
-        if (authUser.status === true) {
+        if (data.user.status === true) {
           navigation.pop();
         } else {
           navigation.replace(screens.Home);
