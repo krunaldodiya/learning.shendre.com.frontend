@@ -1,6 +1,8 @@
+import {observer} from 'mobx-react';
 import React from 'react';
 import {
   ActivityIndicator,
+  Alert,
   SafeAreaView,
   StatusBar,
   Text,
@@ -9,25 +11,39 @@ import {
   View,
 } from 'react-native';
 import {getUniqueId} from 'react-native-device-info';
-import {useDispatch, useSelector} from 'react-redux';
+import {PERMISSIONS} from 'react-native-permissions';
+import {getPermission} from '../libs/permission';
 import {theme} from '../libs/theme';
-import {setClientOtp, verifyOtp} from '../store/actions/otp';
+import {AppStore} from '../mst/store/appStore';
+
+const IMEI = require('react-native-imei');
 
 function VerifyOtp(props: any) {
-  const otpState = useSelector((state: any) => state.otp);
-  const dispatch = useDispatch();
+  const {otp} = AppStore;
+
+  const {
+    verifyOtp,
+    setClientOtp,
+    loading,
+    mobile,
+    clientOtp,
+    getError,
+    isDisabled,
+  } = otp;
 
   const processVerifyOtp = async () => {
-    const uniqueId = getUniqueId();
-
-    dispatch(
-      verifyOtp(
-        otpState.mobile,
-        otpState.clientOtp,
-        uniqueId,
-        props.navigation,
-      ),
+    const hasPermission = await getPermission(
+      PERMISSIONS.ANDROID.READ_PHONE_STATE,
     );
+
+    if (!hasPermission) {
+      return Alert.alert('Permission Denied', 'Can not process');
+    }
+
+    const uniqueId = getUniqueId();
+    const imei = await IMEI.getImei();
+
+    await verifyOtp(mobile, clientOtp, uniqueId, imei, props.navigation);
   };
 
   return (
@@ -62,7 +78,7 @@ function VerifyOtp(props: any) {
                   marginTop: 5,
                   fontWeight: 'bold',
                 }}>
-                {otpState.mobile}
+                {mobile}
               </Text>
             </View>
           </View>
@@ -78,14 +94,14 @@ function VerifyOtp(props: any) {
                 borderRadius: 50,
                 elevation: 5,
               }}
-              value={otpState.clientOtp}
-              onChangeText={otpNumber => dispatch(setClientOtp(otpNumber))}
+              value={clientOtp}
+              onChangeText={otpNumber => setClientOtp(otpNumber)}
               keyboardType="numeric"
             />
 
-            {otpState.errors && otpState.errors.errors.otp && (
+            {getError('otp') && (
               <Text style={{color: 'red', marginTop: 5}}>
-                {otpState.errors.errors.otp}
+                {getError('otp')}
               </Text>
             )}
           </View>
@@ -93,19 +109,20 @@ function VerifyOtp(props: any) {
           <View style={{marginBottom: 10}}>
             <TouchableOpacity
               onPress={processVerifyOtp}
+              disabled={isDisabled('clientOtp')}
               style={{
-                backgroundColor: '#ff6347',
+                backgroundColor: isDisabled('clientOtp') ? '#bbb' : '#ff6347',
                 padding: 10,
                 borderRadius: 50,
                 elevation: 5,
               }}>
-              {otpState.loading ? (
+              {loading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
                 <Text
                   style={{
                     textTransform: 'uppercase',
-                    color: '#fff',
+                    color: isDisabled('clientOtp') ? '#ddd' : '#fff',
                     textAlign: 'center',
                     fontWeight: '700',
                     fontSize: 18,
@@ -121,4 +138,4 @@ function VerifyOtp(props: any) {
   );
 }
 
-export default VerifyOtp;
+export default observer(VerifyOtp);

@@ -1,17 +1,17 @@
+import {observer} from 'mobx-react';
 import React from 'react';
-import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/integration/react';
+import {ActivityIndicator} from 'react-native';
+import {AppStore} from './src/mst/store/appStore';
 import InitialScreen from './src/screens/InitialScreen';
-import {persistor, store} from './src/store';
 
 function App() {
-  return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <InitialScreen />
-      </PersistGate>
-    </Provider>
-  );
+  const {rehydrated, auth} = AppStore;
+
+  if (!rehydrated) {
+    return <ActivityIndicator style={{flex: 1, justifyContent: 'center'}} />;
+  }
+
+  return <InitialScreen initial_screen={auth.initial_screen} />;
 }
 
-export default App;
+export default observer(App);

@@ -8,16 +8,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {requestOtp, setMobile} from '../store/actions/otp';
 import {theme} from '../libs/theme';
+import {observer} from 'mobx-react';
+import {AppStore} from '../mst/store/appStore';
 
 function RequestOtp(props: any) {
-  const otpState = useSelector((state: any) => state.otp);
-  const dispatch = useDispatch();
+  const {otp} = AppStore;
+
+  const {requestOtp, setMobile, loading, mobile, getError, isDisabled} = otp;
 
   const processRequestOtp = async () => {
-    dispatch(requestOtp(otpState.mobile, props.navigation));
+    await requestOtp(mobile, props.navigation);
   };
 
   return (
@@ -57,15 +58,15 @@ function RequestOtp(props: any) {
                 elevation: 5,
               }}
               placeholder="Mobile Number"
-              value={otpState.mobile}
-              onChangeText={mobileNumber => dispatch(setMobile(mobileNumber))}
+              value={mobile}
+              onChangeText={mobileNumber => setMobile(mobileNumber)}
               keyboardType="numeric"
               autoFocus={true}
             />
 
-            {otpState.errors && otpState.errors.errors.mobile && (
+            {getError('mobile') && (
               <Text style={{color: 'red', marginTop: 5}}>
-                {otpState.errors.errors.mobile}
+                {getError('mobile')}
               </Text>
             )}
           </View>
@@ -73,19 +74,20 @@ function RequestOtp(props: any) {
           <View style={{marginBottom: 10}}>
             <TouchableOpacity
               onPress={processRequestOtp}
+              disabled={isDisabled('mobile')}
               style={{
-                backgroundColor: '#ff6347',
+                backgroundColor: isDisabled('mobile') ? '#bbb' : '#ff6347',
                 padding: 10,
                 borderRadius: 50,
                 elevation: 5,
               }}>
-              {otpState.loading ? (
+              {loading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
                 <Text
                   style={{
                     textTransform: 'uppercase',
-                    color: '#fff',
+                    color: isDisabled('mobile') ? '#ddd' : '#fff',
                     textAlign: 'center',
                     fontWeight: '700',
                     fontSize: 18,
@@ -101,4 +103,4 @@ function RequestOtp(props: any) {
   );
 }
 
-export default RequestOtp;
+export default observer(RequestOtp);
