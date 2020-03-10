@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {apiUrl} from '../../libs/vars';
+import {apiUrl} from '../libs/vars';
 
 export async function updateSubscription(payload: any) {
   const {token, plan_id, payment_id} = payload;

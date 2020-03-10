@@ -1,6 +1,6 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
 import {screens} from '../../libs/screens';
-import {verifyOtp} from '../api/verify_otp';
+import {verifyOtp} from '../../api/verify_otp';
 import {SET_INITIAL_SCREEN, SET_TOKEN, SET_USER} from '../constants/auth';
 import {
   VERIFY_OTP,

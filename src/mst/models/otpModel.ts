@@ -1,11 +1,11 @@
-import axios from 'axios';
 import {flow, types} from 'mobx-state-tree';
+import {requestOtp} from '../../api/request_otp';
+import {verifyOtp} from '../../api/verify_otp';
 import {screens} from '../../libs/screens';
-import {apiUrl} from '../../libs/vars';
-import {AppStore} from '../store/appStore';
+import AppStore from '../store/appStore';
 import ValidationError from '../types/validation_error';
 
-export const OtpModel = types
+const OtpModel = types
   .model('OtpModel', {
     loading: types.boolean,
     loaded: types.boolean,
@@ -55,7 +55,8 @@ export const OtpModel = types
       self.loading = true;
 
       try {
-        const {data} = yield axios.post(`${apiUrl}/otp/request`, {mobile});
+        const {data} = yield requestOtp({mobile});
+
         self.serverOtp = data.otp.toString();
         self.loading = false;
         self.loaded = true;
@@ -78,7 +79,7 @@ export const OtpModel = types
       self.loading = true;
 
       try {
-        const {data}: any = yield axios.post(`${apiUrl}/otp/verify`, {
+        const {data}: any = yield verifyOtp({
           mobile,
           otp,
           unique_id,
@@ -111,3 +112,5 @@ export const OtpModel = types
       }
     }),
   }));
+
+export default OtpModel;

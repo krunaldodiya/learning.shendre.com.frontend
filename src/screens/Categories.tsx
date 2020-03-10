@@ -9,26 +9,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
 import {getMediaFile} from '../libs/media';
 import {theme} from '../libs/theme';
-import {loadCategories} from '../store/actions/load_categories';
+import AppStore from '../mst/store/appStore';
 import MainHeader from './MainHeader';
 
 const {width} = Dimensions.get('window');
 
 function Categories(props: any) {
-  const categoriesState = useSelector((state: any) => state.categories);
-
-  const dispatch = useDispatch();
+  const {category} = AppStore;
+  const {loadCategories, categories} = category;
 
   useEffect(() => {
-    dispatch(loadCategories());
-  }, [dispatch]);
-
-  const categories = Object.keys(categoriesState.data).map(
-    id => categoriesState.data[id],
-  );
+    loadCategories();
+  }, [loadCategories]);
 
   const columns = categories.length === 1 ? 1 : 2;
 

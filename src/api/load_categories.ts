@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {apiUrl} from '../../libs/vars';
+import {apiUrl} from '../libs/vars';
 
 export async function loadCategories(payload: any) {
   const {token} = payload;

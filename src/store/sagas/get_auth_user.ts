@@ -1,5 +1,5 @@
 import {call, put, select, takeEvery} from 'redux-saga/effects';
-import {getAuthUser} from '../api/get_auth_user';
+import {getAuthUser} from '../../api/get_auth_user';
 import {
   GET_AUTH_USER,
   GET_AUTH_USER_FAIL,

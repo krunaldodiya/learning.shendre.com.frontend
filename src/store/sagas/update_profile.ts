@@ -1,6 +1,6 @@
 import {call, put, select, takeEvery} from 'redux-saga/effects';
 import {screens} from '../../libs/screens';
-import {updateProfile} from '../api/update_profile';
+import {updateProfile} from '../../api/update_profile';
 import {
   UPDATE_PROFILE,
   UPDATE_PROFILE_FAIL,

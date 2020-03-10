@@ -1,6 +1,6 @@
 import {call, put, takeEvery} from 'redux-saga/effects';
 import {screens} from '../../libs/screens';
-import {requestOtp} from '../api/request_otp';
+import {requestOtp} from '../../api/request_otp';
 import {
   REQUEST_OTP,
   REQUEST_OTP_FAIL,

@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react';
 import React from 'react';
 import {ActivityIndicator} from 'react-native';
-import {AppStore} from './src/mst/store/appStore';
+import AppStore from './src/mst/store/appStore';
 import InitialScreen from './src/screens/InitialScreen';
 
 function App() {

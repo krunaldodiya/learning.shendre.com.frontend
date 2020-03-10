@@ -1,7 +1,7 @@
 import {flow, types} from 'mobx-state-tree';
 import User from '../types/user';
 
-export const UserModel = types
+const UserModel = types
   .model('UserModel', {
     loading: types.boolean,
     loaded: types.boolean,
@@ -18,3 +18,5 @@ export const UserModel = types
       }
     }),
   }));
+
+export default UserModel;

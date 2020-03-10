@@ -1,10 +1,9 @@
-import axios from 'axios';
 import {flow, types} from 'mobx-state-tree';
-import {apiUrl} from '../../libs/vars';
+import {getAuthUser} from '../../api/get_auth_user';
+import AppStore from '../store/appStore';
 import User from '../types/user';
-import {AppStore} from '../store/appStore';
 
-export const AuthModel = types
+const AuthModel = types
   .model('AuthModel', {
     loading: types.boolean,
     loaded: types.boolean,
@@ -27,15 +26,7 @@ export const AuthModel = types
 
     getAuthUser: flow(function*() {
       try {
-        const {data}: any = yield axios.post(
-          `${apiUrl}/users/me`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${self.token}`,
-            },
-          },
-        );
+        const {data}: any = yield getAuthUser({token: self.token});
 
         AppStore.user.addUser(data.user);
       } catch (error) {
@@ -43,3 +34,5 @@ export const AuthModel = types
       }
     }),
   }));
+
+export default AuthModel;

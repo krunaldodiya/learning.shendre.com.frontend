@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
 import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
-import {AppStore} from '../mst/store/appStore';
+import AppStore from '../mst/store/appStore';
 import Categories from './Categories';
 import Chapters from './Chapters';
 import DrawerMenu from './DrawerMenu';

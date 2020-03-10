@@ -14,7 +14,7 @@ import {getUniqueId} from 'react-native-device-info';
 import {PERMISSIONS} from 'react-native-permissions';
 import {getPermission} from '../libs/permission';
 import {theme} from '../libs/theme';
-import {AppStore} from '../mst/store/appStore';
+import AppStore from '../mst/store/appStore';
 
 const IMEI = require('react-native-imei');
 

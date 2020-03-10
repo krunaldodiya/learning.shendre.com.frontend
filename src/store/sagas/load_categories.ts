@@ -1,6 +1,6 @@
 import {normalize} from 'normalizr';
 import {call, put, select, takeEvery} from 'redux-saga/effects';
-import {loadCategories} from '../api/load_categories';
+import {loadCategories} from '../../api/load_categories';
 import {
   LOAD_CATEGORIES,
   LOAD_CATEGORIES_FAIL,

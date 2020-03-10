@@ -1,5 +1,5 @@
 import {call, put, select, takeEvery} from 'redux-saga/effects';
-import {updateSubscription} from '../api/update_subscription';
+import {updateSubscription} from '../../api/update_subscription';
 import {
   UPDATE_SUBSCRIPTION,
   UPDATE_SUBSCRIPTION_FAIL,

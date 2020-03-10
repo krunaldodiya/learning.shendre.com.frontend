@@ -1,3 +1,4 @@
+import {observer} from 'mobx-react';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -9,8 +10,7 @@ import {
   View,
 } from 'react-native';
 import {theme} from '../libs/theme';
-import {observer} from 'mobx-react';
-import {AppStore} from '../mst/store/appStore';
+import AppStore from '../mst/store/appStore';
 
 function RequestOtp(props: any) {
   const {otp} = AppStore;
