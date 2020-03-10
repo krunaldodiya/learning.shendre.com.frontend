@@ -7,7 +7,7 @@ const CategoryModel = types
   .model('CategoryModel', {
     loading: types.boolean,
     loaded: types.boolean,
-    categories: types.array(types.reference(Category)),
+    categories: types.array(Category),
   })
   .actions(self => ({
     loadCategories: flow(function*() {
@@ -16,7 +16,7 @@ const CategoryModel = types
       try {
         const {data} = yield loadCategories({token: AppStore.auth.token});
 
-        self.categories = data;
+        self.categories = data.categories;
         self.loading = false;
         self.loaded = true;
       } catch (error) {

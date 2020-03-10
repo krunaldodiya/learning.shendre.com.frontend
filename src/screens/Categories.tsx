@@ -33,7 +33,7 @@ function Categories(props: any) {
       <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
         <MainHeader {...props} />
 
-        <View style={{flex: 1, padding: 5}}>
+        <View style={{flex: 1, padding: 2}}>
           <FlatList
             key={columns}
             numColumns={columns}
@@ -42,7 +42,7 @@ function Categories(props: any) {
             renderItem={({item}) => {
               return (
                 <TouchableOpacity
-                  style={{backgroundColor: theme.primary}}
+                  style={{backgroundColor: theme.primary, margin: 2}}
                   activeOpacity={0.7}
                   onPress={() =>
                     props.navigation.push('Chapters', {category_id: item.id})
@@ -50,7 +50,11 @@ function Categories(props: any) {
                   <ImageBackground
                     source={{uri: getMediaFile('category', item.image)}}
                     imageStyle={{opacity: 0.1}}
-                    style={{height: width / columns, justifyContent: 'center'}}>
+                    style={{
+                      height: width / columns - 6,
+                      width: width / columns - 6,
+                      justifyContent: 'center',
+                    }}>
                     <View>
                       <Text
                         style={{
