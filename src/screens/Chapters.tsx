@@ -13,6 +13,7 @@ import {
   View,
 } from 'react-native';
 import RazorpayCheckout from 'react-native-razorpay';
+import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
 import {baseUrl} from '../libs/vars';
 
@@ -144,6 +145,14 @@ function Chapters({store, navigation, route}: any) {
           </View>
 
           <View style={{marginHorizontal: 10}}>
+            {!categoryById.chapters?.length && (
+              <View>
+                <Text style={{color: '#fff', fontSize: 14}}>
+                  No Chapters added
+                </Text>
+              </View>
+            )}
+
             <FlatList
               keyExtractor={(_, index) => index.toString()}
               data={categoryById.chapters}
@@ -157,7 +166,12 @@ function Chapters({store, navigation, route}: any) {
                       marginBottom: 5,
                     }}
                     activeOpacity={0.7}
-                    onPress={() => navigation.push('Chapters')}>
+                    onPress={() => {
+                      navigation.push(screens.Topics, {
+                        category_id,
+                        chapter_id: item.id,
+                      });
+                    }}>
                     <View
                       style={{
                         flexDirection: 'row',
@@ -167,7 +181,6 @@ function Chapters({store, navigation, route}: any) {
                         style={{
                           justifyContent: 'center',
                           alignItems: 'center',
-                          marginRight: 10,
                         }}>
                         <Image
                           source={{
@@ -181,7 +194,7 @@ function Chapters({store, navigation, route}: any) {
                           }}
                         />
                       </View>
-                      <View style={{flex: 1}}>
+                      <View style={{flex: 1, marginHorizontal: 10}}>
                         <Text style={{fontSize: 18, fontWeight: 'bold'}}>
                           {item.name}
                         </Text>
@@ -194,10 +207,10 @@ function Chapters({store, navigation, route}: any) {
 
                       <View style={{alignItems: 'center'}}>
                         <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                          {item.topics.length}
+                          {item.topics?.length}
                         </Text>
                         <Text style={{fontSize: 14, fontWeight: 'normal'}}>
-                          {item.topics.length > 1 ? 'Topics' : 'Topic'}
+                          {item.topics?.length > 1 ? 'Topics' : 'Topic'}
                         </Text>
                       </View>
                     </View>

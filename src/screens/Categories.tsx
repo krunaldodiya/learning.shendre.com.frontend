@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import {getMediaFile} from '../libs/media';
+import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
 import MainHeader from './MainHeader';
 
@@ -45,7 +46,7 @@ function Categories({store, navigation}: any) {
                   style={{backgroundColor: theme.primary, margin: 2}}
                   activeOpacity={0.7}
                   onPress={() =>
-                    navigation.push('Chapters', {category_id: item.id})
+                    navigation.push(screens.Chapters, {category_id: item.id})
                   }>
                   <ImageBackground
                     source={{uri: getMediaFile('category', item.image)}}
@@ -72,8 +73,8 @@ function Categories({store, navigation}: any) {
                           textAlign: 'center',
                           marginTop: 20,
                         }}>
-                        {item.chapters.length}
-                        {item.chapters.length > 1 ? ' Chapters' : ' Chapter'}
+                        {item.chapters?.length}
+                        {item.chapters?.length > 1 ? ' Chapters' : ' Chapter'}
                       </Text>
                     </View>
                   </ImageBackground>

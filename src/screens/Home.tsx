@@ -8,6 +8,8 @@ import Categories from './Categories';
 import Chapters from './Chapters';
 import DrawerMenu from './DrawerMenu';
 import EditProfile from './EditProfile';
+import Topics from './Topics';
+import Videos from './Videos';
 
 function DrawerNavigator() {
   const Drawer = createDrawerNavigator();
@@ -46,6 +48,40 @@ function Home({store, navigation}: any) {
       <Stack.Screen
         name={screens.Chapters}
         component={Chapters}
+        options={{
+          headerTintColor: '#fff',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: theme.primary,
+            elevation: 0,
+          },
+          headerTitleStyle: {
+            color: '#fff',
+            textTransform: 'uppercase',
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name={screens.Topics}
+        component={Topics}
+        options={{
+          headerTintColor: '#fff',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: theme.primary,
+            elevation: 0,
+          },
+          headerTitleStyle: {
+            color: '#fff',
+            textTransform: 'uppercase',
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name={screens.Videos}
+        component={Videos}
         options={{
           headerTintColor: '#fff',
           headerTitleAlign: 'center',
