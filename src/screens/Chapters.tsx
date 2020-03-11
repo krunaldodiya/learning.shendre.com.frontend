@@ -91,11 +91,16 @@ function Chapters({store, navigation, route}: any) {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Text style={{fontSize: 18, textTransform: 'uppercase'}}>
-                {checkSubscription(subscription)}
+              <Text
+                style={{
+                  fontSize: 16,
+                  textTransform: 'uppercase',
+                  color: 'black',
+                }}>
+                Status
               </Text>
 
-              {checkSubscription(subscription) !== 'Subscribed' && (
+              {checkSubscription(subscription) !== 'Subscribed' ? (
                 <TouchableOpacity
                   onPress={() => handleSubscription(plan)}
                   style={{
@@ -116,10 +121,21 @@ function Chapters({store, navigation, route}: any) {
                         fontWeight: '700',
                         fontSize: 12,
                       }}>
-                      subscribe now
+                      Buy Now
                     </Text>
                   )}
                 </TouchableOpacity>
+              ) : (
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      textTransform: 'uppercase',
+                      color: 'green',
+                    }}>
+                    Active
+                  </Text>
+                </View>
               )}
             </View>
 
@@ -130,8 +146,20 @@ function Chapters({store, navigation, route}: any) {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                 }}>
-                <Text style={{color: '#000'}}>Expiry Date</Text>
-                <Text style={{color: '#000'}}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    textTransform: 'uppercase',
+                    color: 'black',
+                  }}>
+                  Expiry Date
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    textTransform: 'uppercase',
+                    color: 'red',
+                  }}>
                   {moment(subscription.expires_at).format('DD-MM-YYYY')}
                 </Text>
               </View>

@@ -1115,6 +1115,26 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
+"@types/react-native-orientation@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-native-orientation/-/react-native-orientation-5.0.1.tgz#347f7041683249f9ca7386717aa4dd66b394d3fb"
+  integrity sha512-0Uvj73hXWXwxKISUSh8KDew9005D49NtbLJ/coldIMZNPhI+4obk2X6nzF3FBeIQ/2FbVUUZM6oMMIgQwPUJ2w==
+
+"@types/react-native-video@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-native-video/-/react-native-video-5.0.1.tgz#605b3e3170b2a91c514e828b486030ff426e2e9c"
+  integrity sha512-GxQV9fR7EzE2L02pKk6RpklcD6cbUxph9xl6OYaiY+YJNSlm0H6sQXLJ3sYRybmyoQQpF8VLncOkWjlMzVnbmQ==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
+"@types/react-native@*":
+  version "0.61.20"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.61.20.tgz#937d8ed9768bdfc982e785563c07b4905ba0fd1f"
+  integrity sha512-EEtaP15gpDhpB1N8G3a+nWAzSa3HiLAZvfFkvczCluQXiB2vXAVJyxWls1i3Q9TERVWE3JbOuufgCY6bV1qTzw==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-native@^0.60.25":
   version "0.60.31"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.60.31.tgz#a7af12197f884ad8dd22cda2df9862ed72973ded"
@@ -2357,6 +2377,11 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
+
+eme-encryption-scheme-polyfill@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/eme-encryption-scheme-polyfill/-/eme-encryption-scheme-polyfill-2.0.1.tgz#b080b01bffd74c75c9cf8044c1cabedf3b83954f"
+  integrity sha512-Wz+Ro1c0/2Wsx2RLFvTOO0m4LvYn+7cSnq3XOvRvLLBq8jbvUACH/zpU9s0/5+mQa5oaelkU69x+q0z/iWYrFA==
 
 emoji-regex@^7.0.1:
   version "7.0.3"
@@ -4152,6 +4177,11 @@ jsx-ast-utils@^2.0.1:
     array-includes "^3.0.3"
     object.assign "^4.1.0"
 
+keymirror@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/keymirror/-/keymirror-0.1.1.tgz#918889ea13f8d0a42e7c557250eee713adc95c35"
+  integrity sha1-kYiJ6hP40KQufFVyUO7nE63JXDU=
+
 kind-of@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-1.1.0.tgz#140a3d2d41a36d2efcfa9377b62c24f8495a5c44"
@@ -5351,7 +5381,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@^15.5.7, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.7, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -5477,6 +5507,11 @@ react-native-masked-text@^1.13.0:
     date-and-time "0.9.0"
     tinymask "1.0.2"
 
+react-native-orientation-locker@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/react-native-orientation-locker/-/react-native-orientation-locker-1.1.8.tgz#45d1c9e002496b8d286ec8932d6e3e7d341f9c85"
+  integrity sha512-+Vd7x6O/3zGqYIMXpeDlaw3ma074Dtnocm8ryT9v5SvaiEcWSzII4frPgXaUcc/MiCq4OWZ1JtVoyw75mdomQw==
+
 react-native-permissions@^2.0.9:
   version "2.0.9"
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-2.0.9.tgz#5eabdaa952dd099d14e3790af691f49ff2de0895"
@@ -5512,6 +5547,15 @@ react-native-vector-icons@^6.6.0:
     lodash "^4.0.0"
     prop-types "^15.6.2"
     yargs "^13.2.2"
+
+react-native-video@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-video/-/react-native-video-5.0.2.tgz#8f07da0cd85a1d4b316d115f3786409efc9e39fb"
+  integrity sha512-zbItbMH0uZYkK7xFKa41+950QjoTrIl60bY1vAP7gxTn20HGHvHZRw28h9A5npK5T0QuWMAkn8twaGzqcDkTug==
+  dependencies:
+    keymirror "^0.1.1"
+    prop-types "^15.5.10"
+    shaka-player "^2.4.4"
 
 react-native@0.61.5:
   version "0.61.5"
@@ -6109,6 +6153,13 @@ setprototypeof@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.1.1.tgz#7e95acb24aa92f5885e0abef5ba131330d4ae683"
   integrity sha512-JvdAWfbXeIGaZ9cILp38HntZSFSo3mWg6xGcJJsd+d4aRMOqauag1C63dJfDw7OaMYwEbHMOxEZ1lqVRYP2OAw==
+
+shaka-player@^2.4.4:
+  version "2.5.9"
+  resolved "https://registry.yarnpkg.com/shaka-player/-/shaka-player-2.5.9.tgz#007dc19df2bb5d3d959d278b2d894af05adffe38"
+  integrity sha512-XavLBqxvIbvLOPfk7VKZu5fbMJyVko9bBfzxmMWdX5bvQwUSjU7ZhV8v2tHqXQYafpHml1hlGHzKkLs7idouNQ==
+  dependencies:
+    eme-encryption-scheme-polyfill "^2.0.0"
 
 shebang-command@^1.2.0:
   version "1.2.0"

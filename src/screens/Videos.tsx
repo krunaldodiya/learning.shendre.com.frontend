@@ -9,8 +9,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {theme} from '../libs/theme';
 import Icon from 'react-native-dynamic-vector-icons';
+import {screens} from '../libs/screens';
+import {theme} from '../libs/theme';
 
 function Videos({store, navigation, route}: any) {
   const {category} = store;
@@ -60,7 +61,9 @@ function Videos({store, navigation, route}: any) {
                       marginBottom: 5,
                     }}
                     activeOpacity={0.7}
-                    onPress={() => navigation.push('Chapters')}>
+                    onPress={() => {
+                      navigation.push(screens.Player, {video: item});
+                    }}>
                     <View
                       style={{
                         flexDirection: 'row',

@@ -6,6 +6,7 @@ import {theme} from '../libs/theme';
 import EditProfile from './EditProfile';
 import Home from './Home';
 import InvalidDevice from './InvalidDevice';
+import Player from './Player';
 import RequestOtp from './RequestOtp';
 import VerifyOtp from './VerifyOtp';
 
@@ -62,6 +63,12 @@ function InitialScreen({initial_screen}: any) {
             },
             title: 'Update Profile',
           }}
+        />
+
+        <RootStack.Screen
+          name={screens.Player}
+          component={Player}
+          options={{header: () => null}}
         />
       </RootStack.Navigator>
     </NavigationContainer>
