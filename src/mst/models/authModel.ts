@@ -11,6 +11,16 @@ const AuthModel = types
     authUser: types.maybeNull(types.reference(User)),
     initial_screen: types.string,
   })
+  .views(self => ({
+    get settings() {
+      return self.authUser?.settings.reduce((obj, item) => {
+        return {
+          ...obj,
+          [item['key']]: item['value'],
+        };
+      }, {});
+    },
+  }))
   .actions(self => ({
     setUser: flow(function*(user) {
       self.authUser = user.id;

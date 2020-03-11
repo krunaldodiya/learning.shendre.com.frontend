@@ -14,7 +14,9 @@ import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
 
 function Videos({store, navigation, route}: any) {
-  const {category} = store;
+  const {category, auth} = store;
+  const {settings} = auth;
+
   const {categories} = category;
 
   const {category_id, chapter_id, topic_id} = route.params;
@@ -62,7 +64,7 @@ function Videos({store, navigation, route}: any) {
                     }}
                     activeOpacity={0.7}
                     onPress={() => {
-                      navigation.push(screens.Player, {video: item});
+                      navigation.push(screens.Player, {current_video: item});
                     }}>
                     <View
                       style={{
@@ -76,7 +78,7 @@ function Videos({store, navigation, route}: any) {
                         }}>
                         <Image
                           source={{
-                            uri: `https://api.shendre.com/${item.image}`,
+                            uri: `${settings.video_url}/${item.thumbnail}`,
                           }}
                           style={{
                             width: 40,

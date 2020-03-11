@@ -18,7 +18,8 @@ import MainHeader from './MainHeader';
 const {width} = Dimensions.get('window');
 
 function Categories({store, navigation}: any) {
-  const {category} = store;
+  const {category, auth} = store;
+  const {settings} = auth;
   const {loadCategories, categories} = category;
 
   useEffect(() => {
@@ -49,7 +50,9 @@ function Categories({store, navigation}: any) {
                     navigation.push(screens.Chapters, {category_id: item.id})
                   }>
                   <ImageBackground
-                    source={{uri: getMediaFile('category', item.image)}}
+                    source={{
+                      uri: `${settings.video_url}/${item.image}`,
+                    }}
                     imageStyle={{opacity: 0.1}}
                     style={{
                       height: width / columns - 6,

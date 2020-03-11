@@ -13,7 +13,8 @@ import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
 
 function Topics({store, navigation, route}: any) {
-  const {category} = store;
+  const {category, auth} = store;
+  const {settings} = auth;
   const {categories} = category;
 
   const {category_id, chapter_id} = route.params;
@@ -78,7 +79,7 @@ function Topics({store, navigation, route}: any) {
                         }}>
                         <Image
                           source={{
-                            uri: `https://api.shendre.com/${item.image}`,
+                            uri: `${settings.video_url}/${item.image}`,
                           }}
                           style={{
                             width: 40,

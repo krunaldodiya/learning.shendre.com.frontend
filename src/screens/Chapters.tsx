@@ -19,7 +19,8 @@ import {baseUrl} from '../libs/vars';
 
 function Chapters({store, navigation, route}: any) {
   const {category, auth, user} = store;
-  const {authUser} = auth;
+  const {authUser, settings} = auth;
+
   const {categories} = category;
   const {updateSubscription, loading} = user;
 
@@ -212,7 +213,7 @@ function Chapters({store, navigation, route}: any) {
                         }}>
                         <Image
                           source={{
-                            uri: `https://api.shendre.com/${item.image}`,
+                            uri: `${settings.video_url}/${item.image}`,
                           }}
                           style={{
                             width: 40,

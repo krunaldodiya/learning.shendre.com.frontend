@@ -1,5 +1,6 @@
 import {types} from 'mobx-state-tree';
 import Institute from './institute';
+import Setting from './setting';
 import Subscription from './subscription';
 
 const User = types.model('User', {
@@ -16,6 +17,7 @@ const User = types.model('User', {
   class: types.maybeNull(types.string),
   school: types.maybeNull(types.string),
   subscriptions: types.array(Subscription),
+  settings: types.array(Setting),
 });
 
 export default User;

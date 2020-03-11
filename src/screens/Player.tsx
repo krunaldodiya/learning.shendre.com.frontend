@@ -1,10 +1,16 @@
+import {inject, observer} from 'mobx-react';
 import React, {useEffect, useState} from 'react';
 import {BackHandler, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import Video from 'react-native-video';
 import {theme} from '../libs/theme';
 
-const Player = ({video, navigation}: any) => {
+const Player = ({store, navigation, route}: any) => {
+  const {auth} = store;
+  const {settings} = auth;
+
+  const {current_video} = route.params;
+
   const [hiddenStatusBar, setHiddenStatusBar] = useState(true);
 
   useEffect(() => {
@@ -28,8 +34,7 @@ const Player = ({video, navigation}: any) => {
       <SafeAreaView style={{flex: 1, backgroundColor: theme.primary}}>
         <Video
           source={{
-            uri:
-              'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            uri: `${settings.video_url}/${current_video.url}`,
           }}
           style={styles.video}
           muted={false}
@@ -50,4 +55,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Player;
+export default inject('store')(observer(Player));
