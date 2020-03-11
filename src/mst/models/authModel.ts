@@ -1,6 +1,5 @@
-import {flow, types} from 'mobx-state-tree';
+import {flow, getParent, types} from 'mobx-state-tree';
 import {getAuthUser} from '../../api/get_auth_user';
-import AppStore from '../store/appStore';
 import User from '../types/user';
 
 const AuthModel = types
@@ -21,28 +20,32 @@ const AuthModel = types
       }, {});
     },
   }))
-  .actions(self => ({
-    setUser: flow(function*(user) {
-      self.authUser = user.id;
-    }),
+  .actions(self => {
+    const parent = getParent(self);
 
-    setToken: flow(function*(token) {
-      self.token = token;
-    }),
+    return {
+      setUser: flow(function*(user) {
+        self.authUser = user.id;
+      }),
 
-    setInitialScreen: flow(function*(initial_screen) {
-      self.initial_screen = initial_screen;
-    }),
+      setToken: flow(function*(token) {
+        self.token = token;
+      }),
 
-    getAuthUser: flow(function*() {
-      try {
-        const {data}: any = yield getAuthUser({token: self.token});
+      setInitialScreen: flow(function*(initial_screen) {
+        self.initial_screen = initial_screen;
+      }),
 
-        AppStore.user.addUser(data.user);
-      } catch (error) {
-        console.log(error.response.data);
-      }
-    }),
-  }));
+      getAuthUser: flow(function*() {
+        try {
+          const {data}: any = yield getAuthUser({token: self.token});
+
+          parent.user.addUser(data.user);
+        } catch (error) {
+          console.log(error.response.data);
+        }
+      }),
+    };
+  });
 
 export default AuthModel;

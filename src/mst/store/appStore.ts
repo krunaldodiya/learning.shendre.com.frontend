@@ -44,11 +44,13 @@ const initialState = {
   },
 };
 
-const AppStore = AppModel.actions(self => ({
-  setRehydrated() {
-    self.rehydrated = true;
-  },
-})).create(initialState);
+const AppStore = AppModel.actions(self => {
+  return {
+    setRehydrated() {
+      self.rehydrated = true;
+    },
+  };
+}).create(initialState);
 
 persist('@root', AppStore, {
   storage: AsyncStorage,

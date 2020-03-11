@@ -1,8 +1,7 @@
-import {flow, types} from 'mobx-state-tree';
+import {flow, getParent, types} from 'mobx-state-tree';
 import {requestOtp} from '../../api/request_otp';
 import {verifyOtp} from '../../api/verify_otp';
 import {screens} from '../../libs/screens';
-import AppStore from '../store/appStore';
 import ValidationError from '../types/validation_error';
 
 const OtpModel = types
@@ -40,77 +39,81 @@ const OtpModel = types
       }
     },
   }))
-  .actions(self => ({
-    setMobile: function(mobile: string) {
-      self.mobile = mobile;
-      self.errors = null;
-    },
+  .actions(self => {
+    const parent = getParent(self);
 
-    setClientOtp: function(clientOtp: string) {
-      self.clientOtp = clientOtp;
-      self.errors = null;
-    },
+    return {
+      setMobile: function(mobile: string) {
+        self.mobile = mobile;
+        self.errors = null;
+      },
 
-    requestOtp: flow(function*(mobile: string, navigation: any) {
-      self.loading = true;
+      setClientOtp: function(clientOtp: string) {
+        self.clientOtp = clientOtp;
+        self.errors = null;
+      },
 
-      try {
-        const {data} = yield requestOtp({mobile});
+      requestOtp: flow(function*(mobile: string, navigation: any) {
+        self.loading = true;
 
-        self.serverOtp = data.otp.toString();
-        self.loading = false;
-        self.loaded = true;
+        try {
+          const {data} = yield requestOtp({mobile});
 
-        navigation.replace(screens.VerifyOtp);
-      } catch (error) {
-        self.errors = error.response.data;
-        self.loading = false;
-        self.loaded = true;
-      }
-    }),
+          self.serverOtp = data.otp.toString();
+          self.loading = false;
+          self.loaded = true;
 
-    verifyOtp: flow(function*(
-      mobile: string,
-      otp: string,
-      unique_id: string,
-      imei: [],
-      navigation: any,
-    ) {
-      self.loading = true;
+          navigation.replace(screens.VerifyOtp);
+        } catch (error) {
+          self.errors = error.response.data;
+          self.loading = false;
+          self.loaded = true;
+        }
+      }),
 
-      try {
-        const {data}: any = yield verifyOtp({
-          mobile,
-          otp,
-          unique_id,
-          imei,
-        });
+      verifyOtp: flow(function*(
+        mobile: string,
+        otp: string,
+        unique_id: string,
+        imei: [],
+        navigation: any,
+      ) {
+        self.loading = true;
 
-        const {token, user} = data;
+        try {
+          const {data}: any = yield verifyOtp({
+            mobile,
+            otp,
+            unique_id,
+            imei,
+          });
 
-        const initial_screen =
-          user.status === true
-            ? user.unique_id === unique_id
-              ? screens.Home
-              : screens.InvalidDevice
-            : screens.EditProfile;
+          const {token, user} = data;
 
-        AppStore.user.addUser(user);
+          const initial_screen =
+            user.status === true
+              ? user.unique_id === unique_id
+                ? screens.Home
+                : screens.InvalidDevice
+              : screens.EditProfile;
 
-        AppStore.auth.setInitialScreen(initial_screen);
-        AppStore.auth.setToken(token);
-        AppStore.auth.setUser(user);
+          parent.user.addUser(user);
 
-        self.loading = false;
-        self.loaded = true;
+          parent.auth.setInitialScreen(initial_screen);
+          parent.auth.setToken(token);
+          parent.auth.setUser(user);
 
-        navigation.replace(initial_screen);
-      } catch (error) {
-        self.errors = error.response.data;
-        self.loading = false;
-        self.loaded = true;
-      }
-    }),
-  }));
+          self.loading = false;
+          self.loaded = true;
+
+          navigation.replace(initial_screen);
+        } catch (error) {
+          self.errors = error.response.data;
+          self.loading = false;
+          self.loaded = true;
+        }
+      }),
+    };
+  });
 
 export default OtpModel;

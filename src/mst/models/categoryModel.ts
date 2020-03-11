@@ -1,6 +1,5 @@
-import {flow, types} from 'mobx-state-tree';
+import {flow, types, getParent} from 'mobx-state-tree';
 import {loadCategories} from '../../api/load_categories';
-import AppStore from '../store/appStore';
 import Category from '../types/category';
 
 const CategoryModel = types
@@ -9,21 +8,25 @@ const CategoryModel = types
     loaded: types.boolean,
     categories: types.array(Category),
   })
-  .actions(self => ({
-    loadCategories: flow(function*() {
-      self.loading = true;
+  .actions(self => {
+    const parent = getParent(self);
 
-      try {
-        const {data} = yield loadCategories({token: AppStore.auth.token});
+    return {
+      loadCategories: flow(function*() {
+        self.loading = true;
 
-        self.categories = data.categories;
-        self.loading = false;
-        self.loaded = true;
-      } catch (error) {
-        self.loading = false;
-        self.loaded = true;
-      }
-    }),
-  }));
+        try {
+          const {data} = yield loadCategories({token: parent.auth.token});
+
+          self.categories = data.categories;
+          self.loading = false;
+          self.loaded = true;
+        } catch (error) {
+          self.loading = false;
+          self.loaded = true;
+        }
+      }),
+    };
+  });
 
 export default CategoryModel;
