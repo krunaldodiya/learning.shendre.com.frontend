@@ -1,5 +1,5 @@
 import {inject, observer} from 'mobx-react';
-import React from 'react';
+import React, {useState} from 'react';
 import {
   FlatList,
   Image,
@@ -8,15 +8,18 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-dynamic-vector-icons';
 import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
+import Player from './Player';
+
+const {width} = Dimensions.get('window');
 
 function Videos({store, navigation, route}: any) {
   const {category, auth} = store;
   const {settings} = auth;
-
   const {categories} = category;
 
   const {category_id, chapter_id, topic_id} = route.params;
@@ -29,19 +32,15 @@ function Videos({store, navigation, route}: any) {
 
   navigation.setOptions({title: topicById.name});
 
+  const [currentVideo, setCurrentVideo] = useState(topicById.videos[0]);
+
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor={theme.primary} />
 
       <SafeAreaView style={{flex: 1, backgroundColor: theme.primary}}>
         <View style={{flex: 1}}>
-          <View style={{marginVertical: 20, marginLeft: 10}}>
-            <Text style={{color: '#fff', textTransform: 'uppercase'}}>
-              Videos
-            </Text>
-          </View>
-
-          <View style={{marginHorizontal: 10}}>
+          <View>
             {!topicById.videos?.length && (
               <View>
                 <Text style={{color: '#fff', fontSize: 14}}>
@@ -50,67 +49,97 @@ function Videos({store, navigation, route}: any) {
               </View>
             )}
 
-            <FlatList
-              keyExtractor={(_, index) => index.toString()}
-              data={topicById.videos}
-              renderItem={({item}) => {
-                return (
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: '#fff',
-                      padding: 10,
-                      borderRadius: 5,
-                      marginBottom: 5,
-                    }}
-                    activeOpacity={0.7}
-                    onPress={() => {
-                      navigation.push(screens.Player, {current_video: item});
-                    }}>
-                    <View
+            {topicById.videos?.length && (
+              <View
+                style={{
+                  width: '100%',
+                  height: (width * 9) / 16,
+                  backgroundColor: '#fff',
+                  marginTop: 10,
+                }}>
+                <Player
+                  settings={settings}
+                  current_video={currentVideo}
+                  onFullScreen={() => {
+                    navigation.push(screens.FullScreenPlayer, {
+                      current_video: currentVideo,
+                    });
+                  }}
+                />
+              </View>
+            )}
+
+            <View>
+              <FlatList
+                keyExtractor={(_, index) => index.toString()}
+                data={topicById.videos}
+                style={{margin: 10}}
+                renderItem={({item}) => {
+                  return (
+                    <TouchableOpacity
                       style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
+                        backgroundColor: '#fff',
+                        padding: 10,
+                        borderRadius: 5,
+                        marginBottom: 5,
+                      }}
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        setCurrentVideo(item);
                       }}>
                       <View
                         style={{
-                          justifyContent: 'center',
+                          flexDirection: 'row',
                           alignItems: 'center',
                         }}>
-                        <Image
-                          source={{
-                            uri: `${settings.video_url}/${item.thumbnail}`,
-                          }}
+                        <View
                           style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: 40,
-                            backgroundColor: theme.primary,
-                          }}
-                        />
-                      </View>
-                      <View style={{flex: 1, marginHorizontal: 10}}>
-                        <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                          {item.title}
-                        </Text>
-                        <Text
-                          style={{fontSize: 14, fontWeight: 'normal'}}
-                          numberOfLines={1}>
-                          {item.description}
-                        </Text>
-                      </View>
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}>
+                          <Image
+                            source={{
+                              uri: `${settings.video_url}/${item.thumbnail}`,
+                            }}
+                            style={{
+                              width: 40,
+                              height: 40,
+                              borderRadius: 40,
+                              backgroundColor: theme.primary,
+                            }}
+                          />
+                        </View>
+                        <View style={{flex: 1, marginHorizontal: 10}}>
+                          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+                            {item.title}
+                          </Text>
+                          <Text
+                            style={{fontSize: 14, fontWeight: 'normal'}}
+                            numberOfLines={1}>
+                            {item.description}
+                          </Text>
+                        </View>
 
-                      <View style={{alignItems: 'center'}}>
-                        <Icon
-                          type="MaterialIcons"
-                          name="play-circle-filled"
-                          size={40}
-                        />
+                        <View style={{alignItems: 'center'}}>
+                          <Icon
+                            type="MaterialIcons"
+                            name={
+                              item.id === currentVideo.id
+                                ? 'pause-circle-filled'
+                                : 'play-circle-filled'
+                            }
+                            size={40}
+                            color={
+                              item.id === currentVideo.id ? 'green' : 'gray'
+                            }
+                          />
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
-                );
-              }}
-            />
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            </View>
           </View>
         </View>
       </SafeAreaView>

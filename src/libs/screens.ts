@@ -8,5 +8,5 @@ export const screens = {
   Topics: 'Topics',
   Videos: 'Videos',
   InvalidDevice: 'InvalidDevice',
-  Player: 'Player',
+  FullScreenPlayer: 'FullScreenPlayer',
 };

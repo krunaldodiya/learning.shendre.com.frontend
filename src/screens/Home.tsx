@@ -80,23 +80,6 @@ function Home({store, navigation}: any) {
       />
 
       <Stack.Screen
-        name={screens.Videos}
-        component={Videos}
-        options={{
-          headerTintColor: '#fff',
-          headerTitleAlign: 'center',
-          headerStyle: {
-            backgroundColor: theme.primary,
-            elevation: 0,
-          },
-          headerTitleStyle: {
-            color: '#fff',
-            textTransform: 'uppercase',
-          },
-        }}
-      />
-
-      <Stack.Screen
         name={screens.EditProfile}
         component={EditProfile}
         options={{

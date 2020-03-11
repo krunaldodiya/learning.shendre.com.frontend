@@ -4,11 +4,12 @@ import React from 'react';
 import {screens} from '../libs/screens';
 import {theme} from '../libs/theme';
 import EditProfile from './EditProfile';
+import FullScreenPlayer from './FullScreenPlayer';
 import Home from './Home';
 import InvalidDevice from './InvalidDevice';
-import Player from './Player';
 import RequestOtp from './RequestOtp';
 import VerifyOtp from './VerifyOtp';
+import Videos from './Videos';
 
 function InitialScreen({initial_screen}: any) {
   const RootStack = createStackNavigator();
@@ -66,8 +67,14 @@ function InitialScreen({initial_screen}: any) {
         />
 
         <RootStack.Screen
-          name={screens.Player}
-          component={Player}
+          name={screens.Videos}
+          component={Videos}
+          options={{header: () => null}}
+        />
+
+        <RootStack.Screen
+          name={screens.FullScreenPlayer}
+          component={FullScreenPlayer}
           options={{header: () => null}}
         />
       </RootStack.Navigator>
