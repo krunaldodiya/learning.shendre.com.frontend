@@ -1,5 +1,5 @@
 import {inject, observer} from 'mobx-react';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  BackHandler,
 } from 'react-native';
 import Icon from 'react-native-dynamic-vector-icons';
 import Orientation from 'react-native-orientation-locker';
@@ -45,6 +46,17 @@ function Videos({store, navigation, route}: any) {
     }
   };
 
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      if (fullScreen) {
+        toggleFullScreen();
+        return true;
+      }
+
+      navigation.pop();
+    });
+  }, [toggleFullScreen, fullScreen]);
+
   return (
     <>
       <StatusBar
@@ -59,6 +71,8 @@ function Videos({store, navigation, route}: any) {
             <Player
               settings={settings}
               current_video={currentVideo}
+              next_video={currentVideo}
+              previous_video={currentVideo}
               fullScreen={fullScreen}
               toggleFullScreen={toggleFullScreen}
               width={fullScreen ? '100%' : width}

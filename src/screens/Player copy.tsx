@@ -1,8 +1,7 @@
 import Slider from '@react-native-community/slider';
 import moment from 'moment';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
-  BackHandler,
   Dimensions,
   StyleSheet,
   Text,
@@ -32,17 +31,6 @@ const Player = ({
   const secondsToHms = d => {
     return moment.utc(d * 1000).format('mm:ss');
   };
-
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      if (fullScreen) {
-        toggleFullScreen();
-        return true;
-      }
-
-      return false;
-    });
-  }, [toggleFullScreen, fullScreen]);
 
   return (
     <>
