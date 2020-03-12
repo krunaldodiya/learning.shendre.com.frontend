@@ -32,7 +32,7 @@ function Videos({store, navigation, route}: any) {
 
   const [currentVideo, setCurrentVideo] = useState(topicById.videos[0]);
   const [fullScreen, setFullScreen] = useState(false);
-  const [hiddenStatusBar, setHiddenStatusBar] = useState(true);
+  const [hiddenStatusBar, setHiddenStatusBar] = useState(false);
 
   const toggleFullScreen = () => {
     if (fullScreen) {
@@ -69,7 +69,7 @@ function Videos({store, navigation, route}: any) {
             />
           )}
 
-          <View style={{backgroundColor: 'white'}}>
+          <View style={{backgroundColor: 'transparent'}}>
             {!topicById.videos?.length && (
               <View>
                 <Text style={{color: '#fff', fontSize: 14}}>

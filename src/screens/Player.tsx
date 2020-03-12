@@ -33,7 +33,7 @@ const Player = ({
   };
 
   return (
-    <View style={styles.container}>
+    <>
       <TouchableOpacity
         onPress={() => {
           setTimeout(() => {
@@ -94,7 +94,7 @@ const Player = ({
                       width: 110,
                       alignItems: 'center',
                       justifyContent: 'center',
-                      bottom: 20,
+                      bottom: 5,
                     }}>
                     <Text style={{color: '#fff'}}>
                       {secondsToHms(progress)} / {secondsToHms(duration)}
@@ -116,7 +116,7 @@ const Player = ({
                     />
                   </View>
 
-                  <View style={{width: 40, alignItems: 'center', bottom: 20}}>
+                  <View style={{width: 40, alignItems: 'center', bottom: 5}}>
                     <Icon
                       type="MaterialIcons"
                       name={fullScreen ? 'fullscreen-exit' : 'fullscreen'}
@@ -131,14 +131,11 @@ const Player = ({
           )}
         </View>
       </TouchableOpacity>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   overlay: {
     ...StyleSheet.absoluteFillObject,
   },
