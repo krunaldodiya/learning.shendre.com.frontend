@@ -1,7 +1,9 @@
 import Slider from '@react-native-community/slider';
+import {inject, observer} from 'mobx-react';
 import moment from 'moment';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
+  BackHandler,
   Dimensions,
   StyleSheet,
   Text,
@@ -9,22 +11,32 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-dynamic-vector-icons';
+import Orientation from 'react-native-orientation-locker';
 import Video from 'react-native-video';
 
-const Player = ({
-  settings,
-  current_video,
-  next_video,
-  previous_video,
-  fullScreen,
-  toggleFullScreen,
-  width,
-  height,
-}: any) => {
-  const [progress, setProgress] = useState();
-  const [duration, setDuration] = useState(1);
-  const [paused, setPaused] = useState(false);
-  const [overlay, setOverlay] = useState(false);
+const Player = ({width, height, store}: any) => {
+  const {auth, player} = store;
+  const {settings} = auth;
+  console.log(settings);
+
+  const {
+    currentVideo,
+    nextVideo,
+    previousVideo,
+    progress,
+    duration,
+    setProgress,
+    setDuration,
+    isPaused,
+    isFinished,
+    setIsPaused,
+    setIsFinished,
+    showOverlay,
+    setShowOverlay,
+    setVideo,
+    isFullScreen,
+    setIsFullScreen,
+  } = player;
 
   const playerRef = useRef();
 
@@ -32,35 +44,64 @@ const Player = ({
     return moment.utc(d * 1000).format('mm:ss');
   };
 
+  const toggleFullScreen = () => {
+    if (isFullScreen) {
+      Orientation.lockToPortrait();
+      setIsFullScreen(false);
+    } else {
+      Orientation.lockToLandscape();
+      setIsFullScreen(true);
+    }
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      if (isFullScreen) {
+        toggleFullScreen();
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }, [toggleFullScreen, isFullScreen]);
+
   return (
     <>
       <TouchableOpacity
         onPress={() => {
           setTimeout(() => {
-            setOverlay(false);
+            setShowOverlay(false);
           }, 3000);
 
-          setOverlay(true);
+          setShowOverlay(true);
         }}
         style={{width, height}}>
         <Video
           ref={playerRef}
           source={{
-            uri: `${settings.video_url}/${current_video.url}`,
+            uri: `${settings?.video_url}/${currentVideo?.url}`,
           }}
           style={{...StyleSheet.absoluteFill}}
           muted={false}
           controls={false}
-          paused={paused}
+          repeat={false}
+          paused={isPaused}
           posterResizeMode="cover"
           resizeMode="cover"
-          repeat={false}
-          onProgress={data => setProgress(data.currentTime)}
-          onLoad={data => setDuration(data.duration)}
+          onProgress={data => {
+            setProgress(data.currentTime);
+          }}
+          onLoad={data => {
+            setProgress(data.currentTime);
+            setDuration(data.duration);
+          }}
+          onEnd={() => {
+            setIsFinished(true);
+          }}
         />
 
         <View style={styles.overlay}>
-          {overlay && (
+          {showOverlay && (
             <View style={{...styles.overlaySet, backgroundColor: '#0006'}}>
               <View style={{position: 'absolute', top: 5, right: 5}}>
                 <View style={{flexDirection: 'row'}}>
@@ -89,15 +130,22 @@ const Player = ({
                     size={26}
                     color="#fff"
                     style={styles.icon}
-                    onPress={() => null}
+                    onPress={() => setVideo(previousVideo)}
                   />
                   <Icon
                     type="MaterialCommunityIcons"
-                    name={paused ? 'play' : 'pause'}
+                    name={isFinished ? 'replay' : isPaused ? 'play' : 'pause'}
                     size={36}
                     color="#fff"
                     style={styles.icon}
-                    onPress={() => setPaused(!paused)}
+                    onPress={() => {
+                      if (isFinished) {
+                        setProgress(0);
+                        setDuration(0);
+                      } else {
+                        setIsPaused(!isPaused);
+                      }
+                    }}
                   />
                   <Icon
                     type="AntDesign"
@@ -105,7 +153,7 @@ const Player = ({
                     size={26}
                     color="#fff"
                     style={styles.icon}
-                    onPress={() => null}
+                    onPress={() => setVideo(nextVideo)}
                   />
                 </View>
               </View>
@@ -142,7 +190,7 @@ const Player = ({
                   <View style={{width: 40, alignItems: 'center', bottom: 5}}>
                     <Icon
                       type="MaterialIcons"
-                      name={fullScreen ? 'fullscreen-exit' : 'fullscreen'}
+                      name={isFullScreen ? 'fullscreen-exit' : 'fullscreen'}
                       size={26}
                       color="#fff"
                       onPress={toggleFullScreen}
@@ -179,4 +227,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Player;
+export default inject('store')(observer(Player));

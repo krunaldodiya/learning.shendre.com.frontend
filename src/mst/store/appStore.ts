@@ -5,6 +5,7 @@ import {screens} from '../../libs/screens';
 import AuthModel from '../models/authModel';
 import CategoryModel from '../models/categoryModel';
 import OtpModel from '../models/otpModel';
+import PlayerModel from '../models/playerModel';
 import UserModel from '../models/userModel';
 
 const AppModel = types.model('AppModel', {
@@ -13,6 +14,7 @@ const AppModel = types.model('AppModel', {
   user: UserModel,
   otp: OtpModel,
   category: CategoryModel,
+  player: PlayerModel,
 });
 
 const initialState = {
@@ -41,6 +43,18 @@ const initialState = {
     loading: false,
     loaded: false,
     categories: [],
+  },
+  player: {
+    videoList: [],
+    currentVideo: null,
+    previousVideo: null,
+    nextVideo: null,
+    isFinished: false,
+    isPaused: false,
+    isFullScreen: false,
+    showOverlay: false,
+    progress: 0,
+    duration: 0,
   },
 };
 
