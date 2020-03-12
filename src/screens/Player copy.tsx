@@ -1,24 +1,26 @@
-import React, {useState, useRef} from 'react';
+import Slider from '@react-native-community/slider';
+import moment from 'moment';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  StyleSheet,
-  View,
+  BackHandler,
   Dimensions,
+  StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import Icon from 'react-native-dynamic-vector-icons';
 import Video from 'react-native-video';
-import Slider from '@react-native-community/slider';
-import moment from 'moment';
-
-const {width} = Dimensions.get('window');
 
 const Player = ({
   settings,
   current_video,
   next_video,
   previous_video,
-  onFullScreen,
+  fullScreen,
+  toggleFullScreen,
+  width,
+  height,
 }: any) => {
   const [progress, setProgress] = useState();
   const [duration, setDuration] = useState(1);
@@ -31,8 +33,19 @@ const Player = ({
     return moment.utc(d * 1000).format('mm:ss');
   };
 
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      if (fullScreen) {
+        toggleFullScreen();
+        return true;
+      }
+
+      return false;
+    });
+  }, [toggleFullScreen, fullScreen]);
+
   return (
-    <View style={styles.container}>
+    <>
       <TouchableOpacity
         onPress={() => {
           setTimeout(() => {
@@ -41,13 +54,13 @@ const Player = ({
 
           setOverlay(true);
         }}
-        style={[styles.fullscreenVideo, {...StyleSheet.absoluteFill}]}>
+        style={{width, height}}>
         <Video
           ref={playerRef}
           source={{
             uri: `${settings.video_url}/${current_video.url}`,
           }}
-          style={styles.video}
+          style={{...StyleSheet.absoluteFill}}
           muted={false}
           controls={false}
           paused={paused}
@@ -61,32 +74,55 @@ const Player = ({
         <View style={styles.overlay}>
           {overlay && (
             <View style={{...styles.overlaySet, backgroundColor: '#0006'}}>
-              <Icon
-                type="AntDesign"
-                name="stepbackward"
-                size={26}
-                color="#fff"
-                style={styles.icon}
-                onPress={() => null}
-              />
-              <Icon
-                type="MaterialCommunityIcons"
-                name={paused ? 'play' : 'pause'}
-                size={36}
-                color="#fff"
-                style={styles.icon}
-                onPress={() => setPaused(!paused)}
-              />
-              <Icon
-                type="AntDesign"
-                name="stepforward"
-                size={26}
-                color="#fff"
-                style={styles.icon}
-                onPress={() => null}
-              />
+              <View style={{position: 'absolute', top: 5, right: 5}}>
+                <View style={{flexDirection: 'row'}}>
+                  <Icon
+                    type="MaterialIcons"
+                    name="more-vert"
+                    size={26}
+                    color="#fff"
+                    style={styles.icon}
+                    onPress={() => null}
+                  />
+                </View>
+              </View>
 
-              <View style={styles.sliderCont}>
+              <View
+                style={{
+                  position: 'absolute',
+                  top: height / 2 - 20,
+                  left: 0,
+                  right: 0,
+                }}>
+                <View style={{flexDirection: 'row'}}>
+                  <Icon
+                    type="AntDesign"
+                    name="stepbackward"
+                    size={26}
+                    color="#fff"
+                    style={styles.icon}
+                    onPress={() => null}
+                  />
+                  <Icon
+                    type="MaterialCommunityIcons"
+                    name={paused ? 'play' : 'pause'}
+                    size={36}
+                    color="#fff"
+                    style={styles.icon}
+                    onPress={() => setPaused(!paused)}
+                  />
+                  <Icon
+                    type="AntDesign"
+                    name="stepforward"
+                    size={26}
+                    color="#fff"
+                    style={styles.icon}
+                    onPress={() => null}
+                  />
+                </View>
+              </View>
+
+              <View style={{position: 'absolute', bottom: 0}}>
                 <View style={{flexDirection: 'row'}}>
                   <View
                     style={{
@@ -117,10 +153,11 @@ const Player = ({
 
                   <View style={{width: 40, alignItems: 'center', bottom: 5}}>
                     <Icon
-                      name="fullscreen"
+                      type="MaterialIcons"
+                      name={fullScreen ? 'fullscreen-exit' : 'fullscreen'}
                       size={26}
                       color="#fff"
-                      onPress={onFullScreen}
+                      onPress={toggleFullScreen}
                     />
                   </View>
                 </View>
@@ -129,14 +166,11 @@ const Player = ({
           )}
         </View>
       </TouchableOpacity>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   overlay: {
     ...StyleSheet.absoluteFillObject,
   },
@@ -149,22 +183,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
   },
-  sliderCont: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
   timer: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 5,
-  },
-  video: {width, height: (width * 9) / 16, backgroundColor: 'black'},
-  fullscreenVideo: {
-    backgroundColor: 'black',
-    elevation: 1,
   },
 });
 

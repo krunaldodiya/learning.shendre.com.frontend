@@ -1,7 +1,7 @@
 import {inject, observer} from 'mobx-react';
 import React, {useState} from 'react';
 import {
-  BackHandler,
+  Dimensions,
   FlatList,
   Image,
   SafeAreaView,
@@ -14,6 +14,8 @@ import Icon from 'react-native-dynamic-vector-icons';
 import Orientation from 'react-native-orientation-locker';
 import {theme} from '../libs/theme';
 import Player from './Player';
+
+const {width} = Dimensions.get('window');
 
 function Videos({store, navigation, route}: any) {
   const {category, auth} = store;
@@ -32,28 +34,21 @@ function Videos({store, navigation, route}: any) {
 
   const [currentVideo, setCurrentVideo] = useState(topicById.videos[0]);
   const [fullScreen, setFullScreen] = useState(false);
-  const [hiddenStatusBar, setHiddenStatusBar] = useState(false);
 
   const toggleFullScreen = () => {
     if (fullScreen) {
       Orientation.lockToPortrait();
+      setFullScreen(false);
     } else {
       Orientation.lockToLandscape();
+      setFullScreen(true);
     }
-    setFullScreen(!fullScreen);
   };
-
-  const onBackPress = () => {
-    Orientation.lockToPortrait();
-    setHiddenStatusBar(false);
-  };
-
-  BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
   return (
     <>
       <StatusBar
-        hidden={hiddenStatusBar}
+        hidden={fullScreen}
         barStyle="light-content"
         backgroundColor={theme.primary}
       />
@@ -66,6 +61,8 @@ function Videos({store, navigation, route}: any) {
               current_video={currentVideo}
               fullScreen={fullScreen}
               toggleFullScreen={toggleFullScreen}
+              width={fullScreen ? '100%' : width}
+              height={fullScreen ? width : (width * 9) / 16}
             />
           )}
 
