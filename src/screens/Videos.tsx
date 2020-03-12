@@ -1,6 +1,7 @@
 import {inject, observer} from 'mobx-react';
 import React, {useState} from 'react';
 import {
+  BackHandler,
   FlatList,
   Image,
   SafeAreaView,
@@ -8,14 +9,11 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-dynamic-vector-icons';
-import {screens} from '../libs/screens';
+import Orientation from 'react-native-orientation-locker';
 import {theme} from '../libs/theme';
 import Player from './Player';
-
-const {width} = Dimensions.get('window');
 
 function Videos({store, navigation, route}: any) {
   const {category, auth} = store;
@@ -33,14 +31,45 @@ function Videos({store, navigation, route}: any) {
   navigation.setOptions({title: topicById.name});
 
   const [currentVideo, setCurrentVideo] = useState(topicById.videos[0]);
+  const [fullScreen, setFullScreen] = useState(false);
+  const [hiddenStatusBar, setHiddenStatusBar] = useState(true);
+
+  const toggleFullScreen = () => {
+    if (fullScreen) {
+      Orientation.lockToPortrait();
+    } else {
+      Orientation.lockToLandscape();
+    }
+    setFullScreen(!fullScreen);
+  };
+
+  const onBackPress = () => {
+    Orientation.lockToPortrait();
+    setHiddenStatusBar(false);
+  };
+
+  BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
   return (
     <>
-      <StatusBar barStyle="light-content" backgroundColor={theme.primary} />
+      <StatusBar
+        hidden={hiddenStatusBar}
+        barStyle="light-content"
+        backgroundColor={theme.primary}
+      />
 
       <SafeAreaView style={{flex: 1, backgroundColor: theme.primary}}>
         <View style={{flex: 1}}>
-          <View>
+          {topicById.videos?.length && (
+            <Player
+              settings={settings}
+              current_video={currentVideo}
+              fullScreen={fullScreen}
+              toggleFullScreen={toggleFullScreen}
+            />
+          )}
+
+          <View style={{backgroundColor: 'white'}}>
             {!topicById.videos?.length && (
               <View>
                 <Text style={{color: '#fff', fontSize: 14}}>
@@ -49,27 +78,7 @@ function Videos({store, navigation, route}: any) {
               </View>
             )}
 
-            {topicById.videos?.length && (
-              <View
-                style={{
-                  width: '100%',
-                  height: (width * 9) / 16,
-                  backgroundColor: '#fff',
-                  marginTop: 10,
-                }}>
-                <Player
-                  settings={settings}
-                  current_video={currentVideo}
-                  onFullScreen={() => {
-                    navigation.push(screens.FullScreenPlayer, {
-                      current_video: currentVideo,
-                    });
-                  }}
-                />
-              </View>
-            )}
-
-            <View>
+            {!fullScreen && (
               <FlatList
                 keyExtractor={(_, index) => index.toString()}
                 data={topicById.videos}
@@ -139,7 +148,7 @@ function Videos({store, navigation, route}: any) {
                   );
                 }}
               />
-            </View>
+            )}
           </View>
         </View>
       </SafeAreaView>

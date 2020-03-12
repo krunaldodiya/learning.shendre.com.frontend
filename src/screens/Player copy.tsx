@@ -1,15 +1,15 @@
-import Slider from '@react-native-community/slider';
-import moment from 'moment';
-import React, {useRef, useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
-  Dimensions,
   StyleSheet,
+  View,
+  Dimensions,
   Text,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import Icon from 'react-native-dynamic-vector-icons';
 import Video from 'react-native-video';
+import Slider from '@react-native-community/slider';
+import moment from 'moment';
 
 const {width} = Dimensions.get('window');
 
@@ -18,8 +18,7 @@ const Player = ({
   current_video,
   next_video,
   previous_video,
-  fullScreen,
-  toggleFullScreen,
+  onFullScreen,
 }: any) => {
   const [progress, setProgress] = useState();
   const [duration, setDuration] = useState(1);
@@ -42,13 +41,13 @@ const Player = ({
 
           setOverlay(true);
         }}
-        style={[fullScreen ? styles.fullscreenVideo : styles.video]}>
+        style={[styles.fullscreenVideo, {...StyleSheet.absoluteFill}]}>
         <Video
           ref={playerRef}
           source={{
             uri: `${settings.video_url}/${current_video.url}`,
           }}
-          style={{...StyleSheet.absoluteFill}}
+          style={styles.video}
           muted={false}
           controls={false}
           paused={paused}
@@ -94,7 +93,7 @@ const Player = ({
                       width: 110,
                       alignItems: 'center',
                       justifyContent: 'center',
-                      bottom: 20,
+                      bottom: 5,
                     }}>
                     <Text style={{color: '#fff'}}>
                       {secondsToHms(progress)} / {secondsToHms(duration)}
@@ -116,13 +115,12 @@ const Player = ({
                     />
                   </View>
 
-                  <View style={{width: 40, alignItems: 'center', bottom: 20}}>
+                  <View style={{width: 40, alignItems: 'center', bottom: 5}}>
                     <Icon
-                      type="MaterialIcons"
-                      name={fullScreen ? 'fullscreen-exit' : 'fullscreen'}
+                      name="fullscreen"
                       size={26}
                       color="#fff"
-                      onPress={toggleFullScreen}
+                      onPress={onFullScreen}
                     />
                   </View>
                 </View>
