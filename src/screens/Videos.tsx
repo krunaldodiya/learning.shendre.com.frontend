@@ -1,6 +1,7 @@
 import {inject, observer} from 'mobx-react';
 import React, {useEffect} from 'react';
 import {
+  BackHandler,
   Dimensions,
   FlatList,
   Image,
@@ -11,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-dynamic-vector-icons';
+import Orientation from 'react-native-orientation-locker';
 import {theme} from '../libs/theme';
 import Player from './Player';
 import PlayerModal from './PlayerModal';
@@ -21,7 +23,14 @@ function Videos({store, navigation, route}: any) {
   const {category, auth, player} = store;
   const {settings} = auth;
   const {categories} = category;
-  const {setVideos, setVideo, currentVideo, isFullScreen, videoList} = player;
+  const {
+    setVideos,
+    setVideo,
+    currentVideo,
+    isFullScreen,
+    setIsFullScreen,
+    videoList,
+  } = player;
 
   const {category_id, chapter_id, topic_id} = route.params;
   const categoryById = categories.find((cat: any) => cat.id === category_id);
@@ -32,10 +41,33 @@ function Videos({store, navigation, route}: any) {
   const topicById = chapterById?.topics.find((top: any) => top.id === topic_id);
   navigation.setOptions({title: topicById.name});
 
+  const toggleFullScreen = (backButtonPressed: boolean) => {
+    if (isFullScreen) {
+      Orientation.lockToPortrait();
+      setIsFullScreen(false);
+      return true;
+    }
+
+    if (!backButtonPressed) {
+      Orientation.lockToLandscape();
+      setIsFullScreen(true);
+      return true;
+    }
+
+    navigation.pop();
+    return true;
+  };
+
   useEffect(() => {
     setVideos(topicById?.videos);
     setVideo(topicById?.videos[0]);
   }, []);
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      return toggleFullScreen(true);
+    });
+  }, [toggleFullScreen, isFullScreen]);
 
   return (
     <>
@@ -52,6 +84,7 @@ function Videos({store, navigation, route}: any) {
               <Player
                 width={isFullScreen ? '100%' : width}
                 height={isFullScreen ? width : (width * 9) / 16}
+                toggleFullScreen={toggleFullScreen}
               />
 
               <PlayerModal

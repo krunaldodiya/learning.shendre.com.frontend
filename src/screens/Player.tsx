@@ -1,9 +1,8 @@
 import Slider from '@react-native-community/slider';
 import {inject, observer} from 'mobx-react';
 import moment from 'moment';
-import React, {useEffect, useRef} from 'react';
+import React, {useRef} from 'react';
 import {
-  BackHandler,
   Dimensions,
   StyleSheet,
   Text,
@@ -11,10 +10,9 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-dynamic-vector-icons';
-import Orientation from 'react-native-orientation-locker';
 import Video from 'react-native-video';
 
-const Player = ({width, height, store}: any) => {
+const Player = ({toggleFullScreen, width, height, store}: any) => {
   const {auth, player} = store;
   const {settings} = auth;
 
@@ -34,7 +32,6 @@ const Player = ({width, height, store}: any) => {
     setShowOverlay,
     setVideo,
     isFullScreen,
-    setIsFullScreen,
     rate,
     quality,
     setShowModal,
@@ -46,27 +43,6 @@ const Player = ({width, height, store}: any) => {
   const secondsToHms = d => {
     return moment.utc(d * 1000).format('mm:ss');
   };
-
-  const toggleFullScreen = () => {
-    if (isFullScreen) {
-      Orientation.lockToPortrait();
-      setIsFullScreen(false);
-    } else {
-      Orientation.lockToLandscape();
-      setIsFullScreen(true);
-    }
-  };
-
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      if (isFullScreen) {
-        toggleFullScreen();
-        return true;
-      } else {
-        return false;
-      }
-    });
-  }, [toggleFullScreen, isFullScreen]);
 
   return (
     <>
@@ -199,7 +175,7 @@ const Player = ({width, height, store}: any) => {
                       name={isFullScreen ? 'fullscreen-exit' : 'fullscreen'}
                       size={26}
                       color="#fff"
-                      onPress={toggleFullScreen}
+                      onPress={() => toggleFullScreen(false)}
                     />
                   </View>
                 </View>
