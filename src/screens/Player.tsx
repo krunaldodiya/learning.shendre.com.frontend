@@ -17,7 +17,6 @@ import Video from 'react-native-video';
 const Player = ({width, height, store}: any) => {
   const {auth, player} = store;
   const {settings} = auth;
-  console.log(settings);
 
   const {
     currentVideo,
@@ -36,9 +35,12 @@ const Player = ({width, height, store}: any) => {
     setVideo,
     isFullScreen,
     setIsFullScreen,
+    rate,
+    quality,
+    setShowModal,
   } = player;
 
-  const playerRef = useRef();
+  const playerRef = useRef(null);
 
   const secondsToHms = d => {
     return moment.utc(d * 1000).format('mm:ss');
@@ -78,10 +80,11 @@ const Player = ({width, height, store}: any) => {
         style={{width, height}}>
         <Video
           ref={playerRef}
+          rate={rate}
           source={{
             uri: `${settings?.video_url}/${currentVideo?.url}`,
           }}
-          style={{...StyleSheet.absoluteFill}}
+          style={{...styles.overlaySet}}
           muted={false}
           controls={false}
           repeat={false}
@@ -111,7 +114,7 @@ const Player = ({width, height, store}: any) => {
                     size={26}
                     color="#fff"
                     style={styles.icon}
-                    onPress={() => null}
+                    onPress={() => setShowModal(true, true)}
                   />
                 </View>
               </View>
@@ -140,8 +143,7 @@ const Player = ({width, height, store}: any) => {
                     style={styles.icon}
                     onPress={() => {
                       if (isFinished) {
-                        setProgress(0);
-                        setDuration(0);
+                        setVideo(currentVideo);
                       } else {
                         setIsPaused(!isPaused);
                       }
@@ -182,8 +184,10 @@ const Player = ({width, height, store}: any) => {
                       value={progress}
                       minimumTrackTintColor="#fff"
                       maximumTrackTintColor="#bbb"
-                      onValueChange={data => playerRef.current.seek(data)}
-                      thumbTintColor="white" // now the slider and the time will work
+                      onValueChange={data => {
+                        playerRef.current.seek(data);
+                      }}
+                      thumbTintColor="white"
                     />
                   </View>
 

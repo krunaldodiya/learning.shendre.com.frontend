@@ -13,6 +13,9 @@ const PlayerModel = types
     showOverlay: types.boolean,
     progress: types.number,
     duration: types.number,
+    rate: types.number,
+    quality: types.number,
+    showModal: types.boolean,
   })
   .actions(self => {
     return {
@@ -48,6 +51,11 @@ const PlayerModel = types
         self.showOverlay = show;
       },
 
+      setShowModal(show: boolean, isPaused: boolean) {
+        self.isPaused = isPaused;
+        self.showModal = show;
+      },
+
       setIsFinished(finished: boolean) {
         self.isFinished = finished;
       },
@@ -62,6 +70,16 @@ const PlayerModel = types
 
       setDuration(duration: number) {
         self.duration = duration;
+      },
+
+      setQuality(quality: number) {
+        self.quality = quality;
+        self.setShowModal(false, false);
+      },
+
+      setSpeed(rate: number) {
+        self.rate = rate;
+        self.setShowModal(false, false);
       },
     };
   });

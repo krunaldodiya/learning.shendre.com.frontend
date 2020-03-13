@@ -55,6 +55,9 @@ const initialState = {
     showOverlay: false,
     progress: 0,
     duration: 0,
+    rate: 1,
+    quality: 480,
+    showModal: false,
   },
 };
 
@@ -68,6 +71,7 @@ const AppStore = AppModel.actions(self => {
 
 persist('@root', AppStore, {
   storage: AsyncStorage,
+  blacklist: ['player'],
 }).then(() => AppStore.setRehydrated());
 
 export default AppStore;

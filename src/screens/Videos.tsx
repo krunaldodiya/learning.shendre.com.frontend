@@ -13,6 +13,7 @@ import {
 import Icon from 'react-native-dynamic-vector-icons';
 import {theme} from '../libs/theme';
 import Player from './Player';
+import PlayerModal from './PlayerModal';
 
 const {width} = Dimensions.get('window');
 
@@ -20,12 +21,9 @@ function Videos({store, navigation, route}: any) {
   const {category, auth, player} = store;
   const {settings} = auth;
   const {categories} = category;
-  const {setVideos, setVideo, currentVideo, isFullScreen} = player;
-
-  console.log(settings);
+  const {setVideos, setVideo, currentVideo, isFullScreen, videoList} = player;
 
   const {category_id, chapter_id, topic_id} = route.params;
-
   const categoryById = categories.find((cat: any) => cat.id === category_id);
   const chapterById = categoryById?.chapters.find(
     (chap: any) => chap.id === chapter_id,
@@ -50,10 +48,17 @@ function Videos({store, navigation, route}: any) {
       <SafeAreaView style={{flex: 1, backgroundColor: theme.primary}}>
         <View style={{flex: 1}}>
           {topicById.videos?.length && (
-            <Player
-              width={isFullScreen ? '100%' : width}
-              height={isFullScreen ? width : (width * 9) / 16}
-            />
+            <>
+              <Player
+                width={isFullScreen ? '100%' : width}
+                height={isFullScreen ? width : (width * 9) / 16}
+              />
+
+              <PlayerModal
+                qualities={[480, 720]}
+                speeds={[0.25, 0.5, 1.0, 1.5, 2.0]}
+              />
+            </>
           )}
 
           <View style={{backgroundColor: 'transparent'}}>
@@ -68,7 +73,7 @@ function Videos({store, navigation, route}: any) {
             {!isFullScreen && (
               <FlatList
                 keyExtractor={(_, index) => index.toString()}
-                data={topicById.videos}
+                data={videoList}
                 style={{margin: 10}}
                 renderItem={({item}) => {
                   return (
