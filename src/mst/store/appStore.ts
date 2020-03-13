@@ -71,7 +71,7 @@ const AppStore = AppModel.actions(self => {
 
 persist('@root', AppStore, {
   storage: AsyncStorage,
-  blacklist: ['player'],
+  blacklist: [],
 }).then(() => AppStore.setRehydrated());
 
 export default AppStore;

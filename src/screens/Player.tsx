@@ -38,6 +38,7 @@ const Player = ({width, height, store}: any) => {
     rate,
     quality,
     setShowModal,
+    replayVideo,
   } = player;
 
   const playerRef = useRef(null);
@@ -143,7 +144,8 @@ const Player = ({width, height, store}: any) => {
                     style={styles.icon}
                     onPress={() => {
                       if (isFinished) {
-                        setVideo(currentVideo);
+                        playerRef.current.seek(0);
+                        replayVideo(currentVideo);
                       } else {
                         setIsPaused(!isPaused);
                       }

@@ -42,9 +42,19 @@ const PlayerModel = types
             ? self.videoList[currentVideoIndex - 1]
             : null;
 
+        self.isFinished = false;
+        self.isPaused = false;
+
         self.currentVideo = currentVideo;
         self.nextVideo = nextVideo;
         self.previousVideo = previousVideo;
+      },
+
+      replayVideo(currentVideo: any) {
+        self.progress = 0;
+        self.duration = 0;
+
+        self.setVideo(currentVideo);
       },
 
       setShowOverlay(show: boolean) {
@@ -56,8 +66,13 @@ const PlayerModel = types
         self.showModal = show;
       },
 
+      setIsPaused(paused: boolean) {
+        self.isPaused = paused;
+      },
+
       setIsFinished(finished: boolean) {
         self.isFinished = finished;
+        self.isPaused = true;
       },
 
       setIsFullScreen(fullScreen: boolean) {
